@@ -1,7 +1,7 @@
 package ru.corvinella.parser;
 
-public class ParserUnknownEntityException extends Exception {
-    public ParserUnknownEntityException(String errorText, int tracer) {
-        super(String.format("%s at %d", errorText, tracer));
+public class ParserUnknownEntityException extends ParserException {
+    public ParserUnknownEntityException(String symbol, String expression, int tracer) {
+        super(String.format("Unknown \"%s\" character", symbol), expression, tracer);
     }
 }
