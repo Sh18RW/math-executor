@@ -13,7 +13,5 @@ public class App {
      */
     public static void main(String[] args) throws ParserUnknownEntityException, ParserIllegalTokenValueException {
         // nothing here...
-        Parser parser = new Parser("log(2,4)");
-        parser.parse();
     }
 }

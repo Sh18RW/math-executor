@@ -19,6 +19,23 @@ import ru.corvinella.tokens.WordType;
 
 /**
  * Parses input expressions to list of {@link ru.corvinella.tokens.Token}.
+ * Only parses expression, it doesn't check for correct sequence.
+ * Example to use:
+ * <pre>
+ * Parser parser = new Parser("2 + 2 * 2");
+ * parser.parse(); // throws exceptions
+ * parser.getResult();
+ * </pre>
+ * Supported symbols:
+ * <ul>
+ * <li>Numbers <i>0-9 and .</i></li>
+ * <li>Plus <i>+</i>, minus <i>-</i>, multiply <i>*</i>, divide<i> / </i>, degree<i> ^ </i></li>
+ * <li>Constants <i>Pi</i>, <i>e</i></li>
+ * <li>Functions <i>log</i>, like this: <i>log(2, 4)</i> or <i>log(2;4)</i> (logarithm of four on base 2)</li>
+ * </ul>
+ * 
+ * @author Sh18RW
+ * @version 1.0
  */
 public class Parser {
     private static final String numberEntitiesSymbols = "0123456789.";
@@ -55,9 +72,18 @@ public class Parser {
         this.symbolDefinitions.put(argumentsSeparator, this::parseArgumentSeparator);
     }
 
+    /**
+     * Parses input expression and writes the result into the {@link Parser#result}.
+     * @throws ParserUnknownEntityException if parser sees an unknown symbol that is not supported.
+     * @throws ParserIllegalTokenValueException if parser can't cast some value to current parsing token type.
+     */
     public void parse() throws ParserUnknownEntityException, ParserIllegalTokenValueException {
         for (;index < expression.length();index++) {
             parsingCharacter = "" + expression.charAt(index);
+
+            if (parsingCharacter.equals(" ")) {
+                continue;
+            }
 
             boolean hasProcessed = false;
 
@@ -219,7 +245,7 @@ public class Parser {
             // Constants
             case "Pi":
                 return WordType.Pi;
-            case "E":
+            case "e":
                 return WordType.E;
             
             // Functions

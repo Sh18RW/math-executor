@@ -48,7 +48,7 @@ public class ParserTest {
             new ArgumentsSeparator(0),
             new NumberToken(4.0, 0),
             new ArgumentsParenthesisToken(ParenthesisType.Close, 0)
-        ), packParser("log(2,4)"));
+        ), packParser("log(2, 4)"));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ParserTest {
             new NumberToken(2.0, 0),
             new OperationToken(OperationType.Plus, 0),
             new NumberToken(2.0, 0)
-        ), packParser("2+2"));
+        ), packParser("2 + 2"));
         assertEquals(List.of(
             new NumberToken(1.0, 0),
             new OperationToken(OperationType.Plus, 0),
