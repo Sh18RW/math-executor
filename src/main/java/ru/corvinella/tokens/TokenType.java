@@ -5,4 +5,6 @@ public enum TokenType {
     Operation,
     Parenthesis,
     Word,
+    ArgumentsParenthesis,
+    ArgumentsSeparator,
 }

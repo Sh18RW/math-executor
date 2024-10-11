@@ -5,20 +5,27 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import ru.corvinella.tokens.ArgumentsParenthesisToken;
+import ru.corvinella.tokens.ArgumentsSeparator;
 import ru.corvinella.tokens.NumberToken;
 import ru.corvinella.tokens.OperationToken;
 import ru.corvinella.tokens.OperationType;
+import ru.corvinella.tokens.ParenthesisToken;
+import ru.corvinella.tokens.ParenthesisType;
 import ru.corvinella.tokens.Token;
 import ru.corvinella.tokens.TokenType;
+import ru.corvinella.tokens.WordToken;
+import ru.corvinella.tokens.WordType;
 
 /**
- * Parses input expression to list of {@link ru.corvinella.tokens.Token}.
+ * Parses input expressions to list of {@link ru.corvinella.tokens.Token}.
  */
 public class Parser {
     private static final String numberEntitiesSymbols = "0123456789.";
     private static final String operationEntitiesSymbols = "+-*/^";
     private static final String parenthesisEntitiesSymbols = "()";
-    private static final String wordEntitiesSymbols = "qwertyuiopasdfghjklzxcvbnm";
+    private static final String wordEntitiesSymbols = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    private static final String argumentsSeparator = ",;";
 
     private final String expression;
     private final List<Token<?>> result;
@@ -43,6 +50,9 @@ public class Parser {
 
         this.symbolDefinitions.put(numberEntitiesSymbols, this::parseNumber);
         this.symbolDefinitions.put(operationEntitiesSymbols, this::parseOperation);
+        this.symbolDefinitions.put(parenthesisEntitiesSymbols, this::parseParenthesis);
+        this.symbolDefinitions.put(wordEntitiesSymbols, this::parseWord);
+        this.symbolDefinitions.put(argumentsSeparator, this::parseArgumentSeparator);
     }
 
     public void parse() throws ParserUnknownEntityException, ParserIllegalTokenValueException {
@@ -80,7 +90,9 @@ public class Parser {
 
     private final void parseNumber() throws ParserIllegalTokenValueException {
         if (currentParsingEntityType != TokenType.Number) {
-            packToken();
+            if (currentParsingEntity.length() != 0) {
+                packToken();
+            }
 
             currentParsingEntityType = TokenType.Number;
         }
@@ -94,8 +106,43 @@ public class Parser {
         currentParsingEntityType = TokenType.Operation;
     }
 
+    private final void parseParenthesis() throws ParserIllegalTokenValueException {
+        if (currentParsingEntity.length() != 0) {
+            Token<?> token = packToken();
+
+            if (token.getType() == TokenType.Word) {
+                currentParsingEntityType = TokenType.ArgumentsParenthesis;
+            }
+            else {
+                currentParsingEntityType = TokenType.Parenthesis;
+            }
+        }
+    }
+
+    public final void parseWord() throws ParserIllegalTokenValueException {
+        if (currentParsingEntityType != TokenType.Word) {
+            if (currentParsingEntity.length() != 0) {
+                packToken();
+            }
+
+            currentParsingEntityType = TokenType.Word;
+        }
+    }
+
+    public final void parseArgumentSeparator() throws ParserIllegalTokenValueException {
+        if (currentParsingEntity.length() != 0) {
+            packToken();
+        }
+        
+        currentParsingEntityType = TokenType.ArgumentsSeparator;
+    }
+
     private final Token<?> packToken() throws ParserIllegalTokenValueException {
         Token<?> token;
+
+        if (currentParsingEntity.length() == 0) {
+            throw new IllegalStateException("Parser#packToken() method was called when Parser#currentParsingEntity is empty. It shouldn't happen.");
+        }
         
         switch (currentParsingEntityType) {
             case Number:
@@ -110,8 +157,38 @@ public class Parser {
                 OperationType operationType = getOperationTypeFromString(currentParsingEntity.toString());
                 token = new OperationToken(operationType, index);
                 break;
+            case ArgumentsParenthesis:
+            case Parenthesis:
+                ParenthesisType parenthesisType;
+                switch (currentParsingEntity.toString()) {
+                    case "(":
+                        parenthesisType = ParenthesisType.Open;
+                        break;
+                    case ")":
+                        parenthesisType = ParenthesisType.Close;
+                        break;
+                    default:
+                        throw new ParserIllegalTokenValueException(currentParsingEntity.toString(), currentParsingEntityType, expression, index);
+                }
+
+                if (currentParsingEntityType == TokenType.Parenthesis) {
+                    token = new ParenthesisToken(parenthesisType, index);
+                } else {
+                    token = new ArgumentsParenthesisToken(parenthesisType, index);
+                }
+                break;
+            case Word:
+                WordType wordType = getWordTypeFromString(currentParsingEntity.toString());
+                token = new WordToken(wordType, index);
+                break;
+            case ArgumentsSeparator:
+                token = new ArgumentsSeparator(index);
+                break;
             default:
-                throw new IllegalStateException(); // I am not sure that it can even happen.
+                // I am not sure that it can even happen.
+                throw new IllegalStateException(
+                    String.format("\"%s\" has not realisation.",
+                    currentParsingEntityType));
         }
 
         result.add(token);
@@ -120,7 +197,7 @@ public class Parser {
         return token;
     }
 
-    private OperationType getOperationTypeFromString(String operation) throws ParserIllegalTokenValueException {
+    private final OperationType getOperationTypeFromString(String operation) throws ParserIllegalTokenValueException {
         switch (operation) {
             case "+":
                 return OperationType.Plus;
@@ -134,6 +211,22 @@ public class Parser {
                 return OperationType.Degree;
             default:
                 throw new ParserIllegalTokenValueException(operation, TokenType.Operation, expression, index);
+        }
+    }
+
+    private final WordType getWordTypeFromString(String word) throws ParserIllegalTokenValueException {
+        switch (word) {
+            // Constants
+            case "Pi":
+                return WordType.Pi;
+            case "E":
+                return WordType.E;
+            
+            // Functions
+            case "log":
+                return WordType.Log;
+            default:
+                throw new ParserIllegalTokenValueException(word, TokenType.Word, expression, index);
         }
     }
 
