@@ -28,10 +28,10 @@ import ru.corvinella.tokens.WordType;
  * </pre>
  * Supported symbols:
  * <ul>
- * <li>Numbers <i>0-9 and .</i></li>
- * <li>Plus <i>+</i>, minus <i>-</i>, multiply <i>*</i>, divide<i> / </i>, degree<i> ^ </i></li>
- * <li>Constants <i>Pi</i>, <i>e</i></li>
- * <li>Functions <i>log</i>, like this: <i>log(2, 4)</i> or <i>log(2;4)</i> (logarithm of four on base 2)</li>
+ * <li>Numbers {@code 0-9} and {@code .}</li>
+ * <li>Plus {@code +}, minus {@code -}, multiply {@code *}, divide {@code /}, degree {@code ^}</li>
+ * <li>Constants {@code Pi}, {@code e}</li>
+ * <li>Functions {@code log}, like this: {@code log(2, 4)} or {@code log(2; 4)} (logarithm of 4 on base 2)</li>
  * </ul>
  * 
  * @author Sh18RW
