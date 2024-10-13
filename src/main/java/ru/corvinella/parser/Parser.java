@@ -55,7 +55,7 @@ public class Parser {
     private int index;
 
     public Parser(String expression) {
-        this.expression = expression;
+        this.expression = expression.toLowerCase();
         this.result = new LinkedList<>();
 
         this.index = 0;
@@ -243,7 +243,7 @@ public class Parser {
     private final WordType getWordTypeFromString(String word) throws ParserIllegalTokenValueException {
         switch (word) {
             // Constants
-            case "Pi":
+            case "pi":
                 return WordType.Pi;
             case "e":
                 return WordType.E;
