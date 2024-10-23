@@ -1,7 +1,9 @@
 package ru.corvinella.expressions.entries;
 
+import ru.corvinella.tokens.Token;
+
 /**
  * @author sh18rw
  */
-public class Expression {
+public abstract class Expression {
 }

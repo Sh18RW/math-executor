@@ -1,7 +1,7 @@
 package ru.corvinella.parser;
 
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ import ru.corvinella.tokens.WordType;
  * <li>Functions {@code log}, like this: {@code log(2, 4)} or {@code log(2; 4)} (logarithm of 4 on base 2)</li>
  * </ul>
  * 
- * @author Sh18RW
+ * @author sh18rw
  * @version 1.0
  */
 public class Parser {
@@ -50,7 +50,6 @@ public class Parser {
 
     private StringBuilder currentParsingEntity;
     private TokenType currentParsingEntityType;
-    private String parsingCharacter;
     private boolean isProcessed;
     private int index;
 
@@ -79,7 +78,7 @@ public class Parser {
      */
     public void parse() throws ParserUnknownEntityException, ParserIllegalTokenValueException {
         for (;index < expression.length();index++) {
-            parsingCharacter = "" + expression.charAt(index);
+            String parsingCharacter = "" + expression.charAt(index);
 
             if (parsingCharacter.equals(" ")) {
                 continue;
