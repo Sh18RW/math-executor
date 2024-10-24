@@ -47,4 +47,5 @@ Temporary Items
 target/
 
 # IDEA
-.idea
+.idea/
+*.iml
