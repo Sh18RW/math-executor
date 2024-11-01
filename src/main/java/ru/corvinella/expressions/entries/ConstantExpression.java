@@ -22,6 +22,10 @@ public class ConstantExpression extends ValueExpression {
         }
     }
 
+    public Constant getConstantType() {
+        return constantType;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ConstantExpression)) {

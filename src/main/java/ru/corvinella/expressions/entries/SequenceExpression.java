@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author sh18rw
  */
-public class SequenceExpression extends Expression {
+public class SequenceExpression extends ValueExpression {
     private final List<Expression> expressionsList;
 
     public SequenceExpression() {
@@ -18,6 +18,10 @@ public class SequenceExpression extends Expression {
     }
     public Expression popExpression() {
         return expressionsList.remove(expressionsList.size() - 1);
+    }
+
+    public List<Expression> getExpressions() {
+        return expressionsList;
     }
 
     @Override

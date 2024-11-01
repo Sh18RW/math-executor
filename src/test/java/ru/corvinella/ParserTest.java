@@ -34,37 +34,37 @@ public class ParserTest {
     public void testSimpleWords() {
         assertEquals(Arrays.asList(new WordToken(WordType.Pi, 0)), packParser("Pi"));
         assertEquals(Arrays.asList(
-            new WordToken(WordType.Log, 0),
-            new ArgumentsParenthesisToken(ParenthesisType.Open, 0),
-            new NumberToken(2.0, 0),
-            new ArgumentsSeparator(0),
-            new NumberToken(4.0, 0),
-            new ArgumentsParenthesisToken(ParenthesisType.Close, 0)
+                new WordToken(WordType.Log, 0),
+                new ArgumentsParenthesisToken(ParenthesisType.Open, 0),
+                new NumberToken(2.0, 0),
+                new ArgumentsSeparator(0),
+                new NumberToken(4.0, 0),
+                new ArgumentsParenthesisToken(ParenthesisType.Close, 0)
         ), packParser("log(2, 4)"));
     }
 
     @Test
     public void testSimpleExpressionParsing() {
         assertEquals(Arrays.asList(
-            new NumberToken(2.0, 0),
-            new OperationToken(OperationType.Plus, 0),
-            new NumberToken(2.0, 0)
+                new NumberToken(2.0, 0),
+                new OperationToken(OperationType.Plus, 0),
+                new NumberToken(2.0, 0)
         ), packParser("2 + 2"));
         assertEquals(Arrays.asList(
-            new NumberToken(1.0, 0),
-            new OperationToken(OperationType.Plus, 0),
-            new NumberToken(2.0, 0),
-            new OperationToken(OperationType.Multiply, 0),
-            new NumberToken(3.0, 0),
-            new OperationToken(OperationType.Divide, 0),
-            new NumberToken(4.0, 0),
-            new OperationToken(OperationType.Minus, 0),
-            new NumberToken(5.0, 0),
-            new OperationToken(OperationType.Plus, 0),
-            new OperationToken(OperationType.Minus, 0),
-            new NumberToken(6.0, 0),
-            new OperationToken(OperationType.Degree, 0),
-            new NumberToken(7.0, 0)
+                new NumberToken(1.0, 0),
+                new OperationToken(OperationType.Plus, 0),
+                new NumberToken(2.0, 0),
+                new OperationToken(OperationType.Multiply, 0),
+                new NumberToken(3.0, 0),
+                new OperationToken(OperationType.Divide, 0),
+                new NumberToken(4.0, 0),
+                new OperationToken(OperationType.Minus, 0),
+                new NumberToken(5.0, 0),
+                new OperationToken(OperationType.Plus, 0),
+                new OperationToken(OperationType.Minus, 0),
+                new NumberToken(6.0, 0),
+                new OperationToken(OperationType.Degree, 0),
+                new NumberToken(7.0, 0)
         ), packParser("1+2*3/4-5+-6^7"));
         assertEquals(Arrays.asList(
                 new ParenthesisToken(ParenthesisType.Open, 0),

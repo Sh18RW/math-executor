@@ -27,11 +27,12 @@ public class FunctionExpression extends ValueExpression {
         this.arguments = argumentsExpression;
     }
 
-    // single argument like lg10
-    public void addArguments(ValueExpression expression) {
-        ArgumentsExpression argumentsExpression = new ArgumentsExpression();
-        argumentsExpression.appendExpression(expression);
-        addArguments(argumentsExpression);
+    public Function getFunctionType() {
+        return functionType;
+    }
+
+    public ArgumentsExpression getArguments() {
+        return arguments;
     }
 
     @Override
