@@ -28,13 +28,13 @@ public class ExpressionsTree {
 
     public void build() {
         for (Token<?> token: tokens) {
-            makeToken(token);
+            processToken(token);
         }
 
         root = expressionStates.get(0).pointer;
     }
 
-    private void makeToken(Token<?> token) {
+    private void processToken(Token<?> token) {
         Expression expressionToAdd = null;
         ExpressionState expressionState = getExpressionState();
         switch (token.getType()) {
