@@ -2,16 +2,11 @@ package ru.corvinella;
 
 import org.junit.Test;
 import ru.corvinella.expressions.ExpressionsTree;
-import ru.corvinella.expressions.entries.Expression;
-import ru.corvinella.expressions.entries.NumberExpression;
-import ru.corvinella.expressions.entries.OperationExpression;
-import ru.corvinella.expressions.entries.SequenceExpression;
+import ru.corvinella.expressions.entries.*;
 import ru.corvinella.parser.Parser;
 import ru.corvinella.parser.ParserIllegalTokenValueException;
 import ru.corvinella.parser.ParserUnknownEntityException;
-import ru.corvinella.tokens.NumberToken;
-import ru.corvinella.tokens.OperationToken;
-import ru.corvinella.tokens.OperationType;
+import ru.corvinella.tokens.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -84,7 +79,118 @@ public class ExpressionsTest {
                 "2 + 2 * 3 ^ 4 - 1 * 2");
     }
 
-    private void assertExpression(SequenceExpression expected, String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    @Test
+    public void testFunctionExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+        assertExpression(makeSequence(
+                makeFunction(
+                        WordType.Log,
+                        makeSequence(
+                                makeNumber(2.0)
+                        ),
+                        makeSequence(
+                                makeNumber(4.0))
+                        )
+        ),
+                "log(2, 4)");
+        assertExpression(makeSequence(
+                makeFunction(
+                        WordType.Log,
+                        makeSequence(
+                                makeSequence(
+                                    makeNumber(2.0),
+                                    makeOperation(OperationType.Multiply),
+                                    makeNumber(3.0)
+                                )
+                        ),
+                        makeSequence(
+                                makeNumber(12.0),
+                                makeOperation(OperationType.Minus),
+                                makeSequence(
+                                    makeNumber(-12.0),
+                                    makeOperation(OperationType.Divide),
+                                    makeNumber(-4.0)
+                                )
+                        ))
+        ),
+                "log(2*3,12 - -12 / -4)");
+    }
+
+    @Test
+    public void testConstants() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+        assertExpression(
+                makeSequence(
+                        makeConstant(WordType.Pi)
+                ),
+                "Pi");
+        assertExpression(
+                makeSequence(
+                        makeConstant(WordType.Pi),
+                        makeOperation(OperationType.Plus),
+                        makeConstant(WordType.Pi)
+                ),
+                "Pi + Pi"
+        );
+    }
+
+    @Test
+    public void testParenthesis() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+        assertExpression(
+                makeSequence(
+                        makeSequence(
+                                makeSequence(
+                                        makeNumber(2.0),
+                                        makeOperation(OperationType.Plus),
+                                        makeNumber(2.0)
+                                ),
+                                makeOperation(OperationType.Multiply),
+                                makeNumber(2.0)
+                        )
+                ),
+                "(2 + 2) * 2"
+        );
+        assertExpression(
+                makeSequence(
+                        makeSequence(
+                                makeSequence(
+                                        makeNumber(2.0)
+                                ),
+                                makeOperation(OperationType.Multiply),
+                                makeNumber(2.0)
+                        )
+                ),
+                "(2) * 2"
+        );
+        assertExpression(
+                makeSequence(
+                        makeSequence(
+                                makeSequence(
+                                        makeNumber(2.0),
+                                        makeOperation(OperationType.Plus),
+                                        makeSequence(
+                                                makeSequence(
+                                                        makeNumber(2.0),
+                                                        makeOperation(OperationType.Multiply),
+                                                        makeNumber(2.0)
+                                                ),
+                                                makeOperation(OperationType.Minus),
+                                                makeSequence(
+                                                        makeNumber(2.0)
+                                                )
+                                        )
+                                ),
+                                makeOperation(OperationType.Multiply),
+                                makeNumber(2.0)
+                        )
+                ),
+                "(2 + (2 * 2 - (2))) * 2"
+        );
+    }
+
+    public ConstantExpression makeConstant(WordType wordType) {
+        return new ConstantExpression(new WordToken(wordType, 0));
+    }
+
+    private void assertExpression(Expression expected, String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException {
         Expression parsed = makeExpression(expression);
 
         assertEquals(expected, parsed);
@@ -120,5 +226,18 @@ public class ExpressionsTest {
 
     private OperationExpression makeOperation(OperationType operationType) {
         return new OperationExpression(new OperationToken(operationType, 0));
+    }
+
+    private FunctionExpression makeFunction(WordType type, Expression... arguments) {
+        FunctionExpression functionExpression = new FunctionExpression(new WordToken(type, 0));
+        ArgumentsExpression argumentsExpression = new ArgumentsExpression();
+
+        for (Expression argument : arguments) {
+            argumentsExpression.appendExpression(argument);
+        }
+
+        functionExpression.addArguments(argumentsExpression);
+
+        return functionExpression;
     }
 }

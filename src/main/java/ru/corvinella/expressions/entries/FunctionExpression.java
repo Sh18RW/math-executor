@@ -46,6 +46,14 @@ public class FunctionExpression extends ValueExpression {
                 && functionExpression.arguments.equals(this.arguments);
     }
 
+    @Override
+    public String toString() {
+        return "Function["
+                + functionType
+                + " "
+                + arguments.toString();
+    }
+
     public enum Function {
         Log,
     }

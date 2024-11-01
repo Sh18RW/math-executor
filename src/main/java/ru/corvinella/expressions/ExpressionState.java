@@ -1,7 +1,6 @@
 package ru.corvinella.expressions;
 
-import ru.corvinella.expressions.entries.Expression;
-import ru.corvinella.expressions.entries.SequenceExpression;
+import ru.corvinella.expressions.entries.*;
 import ru.corvinella.tokens.TokenType;
 
 /**
@@ -14,6 +13,8 @@ public class ExpressionState {
 
     public boolean negativeValueNext;
     public boolean awaitsArguments;
+    public boolean ignoreOpenParenthesis = false;
+    public boolean openedWithParenthesis = false;
 
     public boolean expressionStart;
 
@@ -27,12 +28,15 @@ public class ExpressionState {
     }
 
     public void appendExpression(Expression expression) {
-        assert pointer instanceof SequenceExpression;
-        ((SequenceExpression) pointer).append(expression);
+        if (pointer instanceof SequenceExpression) {
+            ((SequenceExpression) pointer).append(expression);
+        } else if (pointer instanceof ArgumentsExpression) {
+            ((ArgumentsExpression) pointer).appendExpression(expression);
+        }
     }
 
     public enum ReadingType {
-        Argument, // reading until close parenthesis or argument separator
+        Argument, // reading opening or closing arguments parenthesis or argument separator
         Sum, // reading minus and plus operations
         Multiply, // reading multiply and divide operations
         Degree, // reading only one expression

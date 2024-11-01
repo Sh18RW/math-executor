@@ -1,13 +1,7 @@
 package ru.corvinella.expressions;
 
-import ru.corvinella.expressions.entries.Expression;
-import ru.corvinella.expressions.entries.NumberExpression;
-import ru.corvinella.expressions.entries.OperationExpression;
-import ru.corvinella.expressions.entries.SequenceExpression;
-import ru.corvinella.tokens.NumberToken;
-import ru.corvinella.tokens.OperationToken;
-import ru.corvinella.tokens.OperationType;
-import ru.corvinella.tokens.Token;
+import ru.corvinella.expressions.entries.*;
+import ru.corvinella.tokens.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +30,11 @@ public class ExpressionsTree {
 
     private void processToken(Token<?> token) {
         Expression expressionToAdd = null;
+        boolean appendExpression = true;
         ExpressionState expressionState = getExpressionState();
+
+        // la pasta. I am not sure how to make it look beauty.
+        // it should work, but what cost?
         switch (token.getType()) {
             case Operation:
                 OperationToken operationToken = (OperationToken) token;
@@ -55,7 +53,8 @@ public class ExpressionsTree {
                 switch (operationToken.getValue()) {
                     case Plus:
                     case Minus:
-                        while (expressionState.readingType != ExpressionState.ReadingType.Sum) {
+                        while (expressionState.readingType != ExpressionState.ReadingType.Sum
+                                && expressionState.readingType != ExpressionState.ReadingType.Argument) {
                             endCurrentState();
                             expressionState = getExpressionState();
                         }
@@ -94,20 +93,110 @@ public class ExpressionsTree {
 
                 break;
             case Number:
-                NumberToken numberToken = (NumberToken) token;
+            case Word:
+                boolean isNumber = token instanceof NumberToken;
+
                 if(expressionState.waitedType == ExpressionState.ReadingTokenType.Operation) {
-                    OperationToken multiplyToken = new OperationToken(OperationType.Multiply, numberToken.getTracer());
+                    OperationToken multiplyToken = new OperationToken(OperationType.Multiply, token.getTracer());
                     OperationExpression multiplyExpression = new OperationExpression(multiplyToken);
                     expressionState.appendExpression(multiplyExpression);
+                    break;
                 }
-
                 boolean isNegative = expressionState.negativeValueNext;
                 if (isNegative) {
                     expressionState.negativeValueNext = false;
                 }
 
-                expressionToAdd = new NumberExpression(isNegative, numberToken);
                 expressionState.waitedType = ExpressionState.ReadingTokenType.Operation;
+
+                if (isNumber) {
+                    expressionToAdd = new NumberExpression(isNegative, (NumberToken) token);
+                } else {
+                    WordToken wordToken = (WordToken) token;
+
+                    switch (wordToken.getValue()) {
+                        case Pi:
+                        case E:
+                            expressionToAdd = new ConstantExpression(wordToken);
+                            break;
+                        case Log:
+                            FunctionExpression functionExpression = new FunctionExpression(wordToken);
+                            ArgumentsExpression argumentsExpression = new ArgumentsExpression();
+                            ExpressionState argumentsState = new ExpressionState(argumentsExpression, ExpressionState.ReadingType.Argument);
+                            expressionStates.add(argumentsState);
+                            SequenceExpression sequenceExpression = new SequenceExpression();
+                            ExpressionState newState = new ExpressionState(sequenceExpression, ExpressionState.ReadingType.Sum);
+                            newState.ignoreOpenParenthesis = true;
+                            expressionStates.add(newState);
+                            argumentsExpression.appendExpression(sequenceExpression);
+
+                            functionExpression.addArguments(argumentsExpression);
+                            expressionToAdd = functionExpression;
+                            break;
+                        default:
+                            // TODO: a normal exception
+                            throw new IllegalStateException();
+                    }
+                }
+
+                // it means that a function has a single argument
+                if (expressionState.ignoreOpenParenthesis) {
+                    endCurrentState(); // closing sequence
+                    endCurrentState(); // closing arguments
+                }
+
+                break;
+            case ArgumentsSeparator:
+
+                while (expressionState.readingType != ExpressionState.ReadingType.Argument) {
+                    endCurrentState();
+                    expressionState = getExpressionState();
+                }
+
+                expressionToAdd = new SequenceExpression();
+                expressionStates.add(new ExpressionState(expressionToAdd, ExpressionState.ReadingType.Sum));
+
+                break;
+            case ArgumentsParenthesis:
+                appendExpression = false;
+                ArgumentsParenthesisToken argumentsParenthesisToken = (ArgumentsParenthesisToken) token;
+
+                if (argumentsParenthesisToken.getValue() == ParenthesisType.Open) {
+                    assert expressionState.ignoreOpenParenthesis;
+
+                    expressionState.ignoreOpenParenthesis = false;
+                } else {
+                    // move to arguments expression
+                    while (expressionState.readingType != ExpressionState.ReadingType.Argument) {
+                        endCurrentState();
+                        expressionState = getExpressionState();
+                    }
+
+                    endCurrentState();
+                }
+
+                break;
+            case Parenthesis:
+                ParenthesisToken parenthesisToken = (ParenthesisToken) token;
+
+                if (parenthesisToken.getValue() == ParenthesisType.Open) {
+                    expressionToAdd = new SequenceExpression();
+
+                    expressionState.waitedType = ExpressionState.ReadingTokenType.Operation;
+
+                    ExpressionState newState = new ExpressionState(expressionToAdd, ExpressionState.ReadingType.Sum);
+                    newState.openedWithParenthesis = true;
+                    expressionStates.add(newState);
+                } else {
+                    appendExpression = false;
+
+                    while (!expressionState.openedWithParenthesis) {
+                        endCurrentState();
+                        expressionState = getExpressionState();
+                    }
+
+                    endCurrentState();
+                }
 
                 break;
             default:
@@ -118,7 +207,9 @@ public class ExpressionsTree {
                                 token.getTracer()));
         }
 
-        expressionState.appendExpression(expressionToAdd);
+        if (appendExpression) {
+            expressionState.appendExpression(expressionToAdd);
+        }
     }
 
     private ExpressionState getExpressionState() {

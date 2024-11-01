@@ -66,6 +66,15 @@ public class ParserTest {
             new OperationToken(OperationType.Degree, 0),
             new NumberToken(7.0, 0)
         ), packParser("1+2*3/4-5+-6^7"));
+        assertEquals(Arrays.asList(
+                new ParenthesisToken(ParenthesisType.Open, 0),
+                new NumberToken(2.0, 0),
+                new OperationToken(OperationType.Plus, 0),
+                new NumberToken(2.0, 0),
+                new ParenthesisToken(ParenthesisType.Close, 0),
+                new OperationToken(OperationType.Multiply, 0),
+                new NumberToken(2.0, 0)
+        ), packParser("(2 + 2) * 2"));
     }
 
     private final List<Token<?>> packParser(String expression) {

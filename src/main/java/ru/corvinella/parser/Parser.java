@@ -1,9 +1,6 @@
 package ru.corvinella.parser;
 
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ru.corvinella.tokens.ArgumentsParenthesisToken;
 import ru.corvinella.tokens.ArgumentsSeparator;
@@ -47,6 +44,7 @@ public class Parser {
     private final String expression;
     private final List<Token<?>> result;
     private final Map<String, IProcessable> symbolDefinitions;
+    private final Stack<Token<?>> parenthesisTokens;
 
     private StringBuilder currentParsingEntity;
     private TokenType currentParsingEntityType;
@@ -63,6 +61,7 @@ public class Parser {
         this.currentParsingEntityType = TokenType.Number;
 
         this.symbolDefinitions = new HashMap<>();
+        this.parenthesisTokens = new Stack<>();
 
         this.symbolDefinitions.put(numberEntitiesSymbols, this::parseNumber);
         this.symbolDefinitions.put(operationEntitiesSymbols, this::parseOperation);
@@ -141,6 +140,8 @@ public class Parser {
             else {
                 currentParsingEntityType = TokenType.Parenthesis;
             }
+        } else {
+            currentParsingEntityType = TokenType.Parenthesis;
         }
     }
 
@@ -196,10 +197,19 @@ public class Parser {
                         throw new ParserIllegalTokenValueException(currentParsingEntity.toString(), currentParsingEntityType, expression, index);
                 }
 
-                if (currentParsingEntityType == TokenType.Parenthesis) {
-                    token = new ParenthesisToken(parenthesisType, index);
+                if (parenthesisType == ParenthesisType.Open) {
+                    if (currentParsingEntityType == TokenType.Parenthesis) {
+                        token = new ParenthesisToken(parenthesisType, index);
+                    } else {
+                        token = new ArgumentsParenthesisToken(parenthesisType, index);
+                    }
+                    parenthesisTokens.add(token);
                 } else {
-                    token = new ArgumentsParenthesisToken(parenthesisType, index);
+                    if (parenthesisTokens.pop() instanceof ArgumentsParenthesisToken) {
+                        token = new ArgumentsParenthesisToken(parenthesisType, index);
+                    } else {
+                        token = new ParenthesisToken(parenthesisType, index);
+                    }
                 }
                 break;
             case Word:

@@ -7,13 +7,13 @@ import java.util.List;
  * @author sh18rw
  */
 public class ArgumentsExpression extends Expression {
-    private final List<ValueExpression> arguments;
+    private final List<Expression> arguments;
 
     public ArgumentsExpression() {
         this.arguments = new LinkedList<>();
     }
 
-    public final void appendExpression(ValueExpression valueExpression) {
+    public final void appendExpression(Expression valueExpression) {
         arguments.add(valueExpression);
     }
 
@@ -21,7 +21,7 @@ public class ArgumentsExpression extends Expression {
         return arguments.size();
     }
 
-    public final ValueExpression getArgument(int index) {
+    public final Expression getArgument(int index) {
         return arguments.get(index);
     }
 
@@ -37,5 +37,16 @@ public class ArgumentsExpression extends Expression {
         stringBuilder.append(']');
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ArgumentsExpression)) {
+            return false;
+        }
+
+        ArgumentsExpression argumentsExpression = (ArgumentsExpression) obj;
+
+        return argumentsExpression.arguments.equals(this.arguments);
     }
 }
