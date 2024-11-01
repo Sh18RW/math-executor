@@ -17,7 +17,7 @@ public class ArgumentsExpression extends Expression {
         arguments.add(valueExpression);
     }
 
-    public final int getArgumentsSize() {
+    public final int getArgumentsCount() {
         return arguments.size();
     }
 

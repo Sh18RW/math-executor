@@ -22,4 +22,15 @@ public class OperationExpression extends Expression {
                 + token.getValue()
                 + "]";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof OperationExpression)) {
+            return false;
+        }
+
+        OperationExpression operationExpression = (OperationExpression) obj;
+
+        return operationExpression.getToken().equals(this.getToken());
+    }
 }

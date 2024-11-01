@@ -34,4 +34,15 @@ public class SequenceExpression extends Expression {
 
         return stringBuilder.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SequenceExpression)) {
+            return false;
+        }
+
+        SequenceExpression sequenceExpression = (SequenceExpression) obj;
+
+        return sequenceExpression.expressionsList.equals(this.expressionsList);
+    }
 }

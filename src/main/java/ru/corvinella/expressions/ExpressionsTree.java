@@ -55,7 +55,7 @@ public class ExpressionsTree {
                 switch (operationToken.getValue()) {
                     case Plus:
                     case Minus:
-                        if (expressionState.readingType != ExpressionState.ReadingType.Sum) {
+                        while (expressionState.readingType != ExpressionState.ReadingType.Sum) {
                             endCurrentState();
                             expressionState = getExpressionState();
                         }

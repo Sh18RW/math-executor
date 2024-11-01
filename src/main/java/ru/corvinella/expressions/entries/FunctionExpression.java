@@ -27,11 +27,23 @@ public class FunctionExpression extends ValueExpression {
         this.arguments = argumentsExpression;
     }
 
-    // single arguments like lg10
+    // single argument like lg10
     public void addArguments(ValueExpression expression) {
         ArgumentsExpression argumentsExpression = new ArgumentsExpression();
         argumentsExpression.appendExpression(expression);
         addArguments(argumentsExpression);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof FunctionExpression)) {
+            return false;
+        }
+
+        FunctionExpression functionExpression = (FunctionExpression) obj;
+
+        return functionExpression.functionType.equals(this.functionType)
+                && functionExpression.arguments.equals(this.arguments);
     }
 
     public enum Function {

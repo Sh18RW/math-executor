@@ -26,7 +26,21 @@ public class NumberExpression extends ValueExpression {
     public String toString() {
 
         return "Number[" +
+                (isNegative ? "negative" : "positive") +
+                " " +
                 token.getValue() +
                 "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof NumberExpression)) {
+            return false;
+        }
+
+        NumberExpression numberExpression = (NumberExpression) obj;
+
+        return numberExpression.token.equals(this.token)
+                && (numberExpression.isNegative() == this.isNegative());
     }
 }
