@@ -82,37 +82,85 @@ public class ExpressionsTest {
     @Test
     public void testFunctionExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
         assertExpression(makeSequence(
-                makeFunction(
-                        WordType.Log,
-                        makeSequence(
-                                makeNumber(2.0)
-                        ),
-                        makeSequence(
-                                makeNumber(4.0))
+                        makeFunction(
+                                WordType.Log,
+                                makeSequence(
+                                        makeNumber(2.0)
+                                ),
+                                makeSequence(
+                                        makeNumber(4.0))
                         )
-        ),
+                ),
                 "log(2, 4)");
+        assertExpression(
+                makeSequence(
+                        makeSequence(
+                                makeSequence(
+                                        makeFunction(
+                                                WordType.Log,
+                                                makeSequence(
+                                                        makeNumber(2.0)
+                                                ),
+                                                makeSequence(
+                                                        makeNumber(4.0)
+                                                )
+                                        ),
+                                        makeOperation(OperationType.Plus),
+                                        makeNumber(1.0)
+                                ),
+                                makeOperation(OperationType.Multiply),
+                                makeNumber(3.0)
+                        )
+                ),
+                "(log(2, 4) + 1) * 3");
         assertExpression(makeSequence(
-                makeFunction(
-                        WordType.Log,
-                        makeSequence(
+                        makeFunction(
+                                WordType.Log,
                                 makeSequence(
-                                    makeNumber(2.0),
-                                    makeOperation(OperationType.Multiply),
-                                    makeNumber(3.0)
-                                )
-                        ),
-                        makeSequence(
-                                makeNumber(12.0),
-                                makeOperation(OperationType.Minus),
+                                        makeSequence(
+                                                makeNumber(2.0),
+                                                makeOperation(OperationType.Multiply),
+                                                makeNumber(3.0)
+                                        )
+                                ),
                                 makeSequence(
-                                    makeNumber(-12.0),
-                                    makeOperation(OperationType.Divide),
-                                    makeNumber(-4.0)
-                                )
-                        ))
-        ),
+                                        makeNumber(12.0),
+                                        makeOperation(OperationType.Minus),
+                                        makeSequence(
+                                                makeNumber(-12.0),
+                                                makeOperation(OperationType.Divide),
+                                                makeNumber(-4.0)
+                                        )
+                                ))
+                ),
                 "log(2*3,12 - -12 / -4)");
+        assertExpression(makeSequence(
+                        makeFunction(
+                                WordType.Log,
+                                makeSequence(
+                                        makeSequence(
+                                                makeSequence(
+                                                        makeNumber(2.0),
+                                                        makeOperation(OperationType.Plus),
+                                                        makeNumber(0.0)
+                                                ),
+                                                makeOperation(OperationType.Multiply),
+                                                makeNumber(3.0)
+                                        )
+                                ),
+                                makeSequence(
+                                        makeSequence(
+                                                makeNumber(12.0),
+                                                makeOperation(OperationType.Minus),
+                                                makeSequence(
+                                                        makeNumber(-12.0),
+                                                        makeOperation(OperationType.Divide),
+                                                        makeNumber(-4.0)
+                                                )
+                                        )
+                                ))
+                ),
+                "log((2+0)*3,(12 - -12 / -4))");
     }
 
     @Test
