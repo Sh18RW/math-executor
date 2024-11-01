@@ -1,9 +1,6 @@
 package ru.corvinella.parser;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ru.corvinella.tokens.ArgumentsParenthesisToken;
 import ru.corvinella.tokens.ArgumentsSeparator;
@@ -28,13 +25,13 @@ import ru.corvinella.tokens.WordType;
  * </pre>
  * Supported symbols:
  * <ul>
- * <li>Numbers <i>0-9 and .</i></li>
- * <li>Plus <i>+</i>, minus <i>-</i>, multiply <i>*</i>, divide<i> / </i>, degree<i> ^ </i></li>
- * <li>Constants <i>Pi</i>, <i>e</i></li>
- * <li>Functions <i>log</i>, like this: <i>log(2, 4)</i> or <i>log(2;4)</i> (logarithm of four on base 2)</li>
+ * <li>Numbers {@code 0-9} and {@code .}</li>
+ * <li>Plus {@code +}, minus {@code -}, multiply {@code *}, divide {@code /}, degree {@code ^}</li>
+ * <li>Constants {@code Pi}, {@code e}</li>
+ * <li>Functions {@code log}, like this: {@code log(2, 4)} or {@code log(2; 4)} (logarithm of 4 on base 2)</li>
  * </ul>
  * 
- * @author Sh18RW
+ * @author sh18rw
  * @version 1.0
  */
 public class Parser {
@@ -47,15 +44,15 @@ public class Parser {
     private final String expression;
     private final List<Token<?>> result;
     private final Map<String, IProcessable> symbolDefinitions;
+    private final Stack<Token<?>> parenthesisTokens;
 
     private StringBuilder currentParsingEntity;
     private TokenType currentParsingEntityType;
-    private String parsingCharacter;
     private boolean isProcessed;
     private int index;
 
     public Parser(String expression) {
-        this.expression = expression;
+        this.expression = expression.toLowerCase();
         this.result = new LinkedList<>();
 
         this.index = 0;
@@ -64,6 +61,7 @@ public class Parser {
         this.currentParsingEntityType = TokenType.Number;
 
         this.symbolDefinitions = new HashMap<>();
+        this.parenthesisTokens = new Stack<>();
 
         this.symbolDefinitions.put(numberEntitiesSymbols, this::parseNumber);
         this.symbolDefinitions.put(operationEntitiesSymbols, this::parseOperation);
@@ -79,7 +77,7 @@ public class Parser {
      */
     public void parse() throws ParserUnknownEntityException, ParserIllegalTokenValueException {
         for (;index < expression.length();index++) {
-            parsingCharacter = "" + expression.charAt(index);
+            String parsingCharacter = "" + expression.charAt(index);
 
             if (parsingCharacter.equals(" ")) {
                 continue;
@@ -142,6 +140,8 @@ public class Parser {
             else {
                 currentParsingEntityType = TokenType.Parenthesis;
             }
+        } else {
+            currentParsingEntityType = TokenType.Parenthesis;
         }
     }
 
@@ -197,10 +197,19 @@ public class Parser {
                         throw new ParserIllegalTokenValueException(currentParsingEntity.toString(), currentParsingEntityType, expression, index);
                 }
 
-                if (currentParsingEntityType == TokenType.Parenthesis) {
-                    token = new ParenthesisToken(parenthesisType, index);
+                if (parenthesisType == ParenthesisType.Open) {
+                    if (currentParsingEntityType == TokenType.Parenthesis) {
+                        token = new ParenthesisToken(parenthesisType, index);
+                    } else {
+                        token = new ArgumentsParenthesisToken(parenthesisType, index);
+                    }
+                    parenthesisTokens.add(token);
                 } else {
-                    token = new ArgumentsParenthesisToken(parenthesisType, index);
+                    if (parenthesisTokens.pop() instanceof ArgumentsParenthesisToken) {
+                        token = new ArgumentsParenthesisToken(parenthesisType, index);
+                    } else {
+                        token = new ParenthesisToken(parenthesisType, index);
+                    }
                 }
                 break;
             case Word:
@@ -243,7 +252,7 @@ public class Parser {
     private final WordType getWordTypeFromString(String word) throws ParserIllegalTokenValueException {
         switch (word) {
             // Constants
-            case "Pi":
+            case "pi":
                 return WordType.Pi;
             case "e":
                 return WordType.E;

@@ -45,3 +45,7 @@ Temporary Items
 
 # Compiling
 target/
+
+# IDEA
+.idea/
+*.iml
