@@ -1,7 +1,8 @@
 package ru.corvinella.expressions;
 
-import ru.corvinella.expressions.entries.*;
-import ru.corvinella.tokens.TokenType;
+import ru.corvinella.expressions.entries.ArgumentsExpression;
+import ru.corvinella.expressions.entries.Expression;
+import ru.corvinella.expressions.entries.SequenceExpression;
 
 /**
  * @author sh18rw
@@ -40,7 +41,6 @@ public class ExpressionState {
         Sum, // reading minus and plus operations
         Multiply, // reading multiply and divide operations
         Degree, // reading only one expression
-        Parenthesis, // reading until close parenthesis
     }
 
     public enum ReadingTokenType {

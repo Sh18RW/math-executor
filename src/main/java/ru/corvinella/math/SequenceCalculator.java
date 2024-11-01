@@ -10,15 +10,10 @@ import ru.corvinella.tokens.OperationType;
  * @author sh18rw
  */
 public class SequenceCalculator implements ICalculator<SequenceExpression> {
-    private static final SequenceCalculator instance;
     private static final VariableCalculator variableCalculator;
 
     static {
-        instance = new SequenceCalculator();
         variableCalculator = new VariableCalculator();
-    }
-    public static SequenceCalculator getInstance() {
-        return instance;
     }
 
     @Override

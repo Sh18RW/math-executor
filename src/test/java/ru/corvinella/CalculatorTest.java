@@ -4,13 +4,11 @@ import org.junit.Test;
 import ru.corvinella.expressions.ExpressionsTree;
 import ru.corvinella.expressions.entries.SequenceExpression;
 import ru.corvinella.math.Calculator;
-import ru.corvinella.math.SequenceCalculator;
 import ru.corvinella.parser.Parser;
 import ru.corvinella.parser.ParserIllegalTokenValueException;
 import ru.corvinella.parser.ParserUnknownEntityException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author sh18rw
@@ -27,8 +25,9 @@ public class CalculatorTest {
         makeTest("(4 * 2) / (16 ^ 0)", 8.0);
         makeTest("log(2, 8)", 3.0);
         makeTest("2 + (2 + 2) / (2 ^ 2)", 3.0);
-        makeTest("2 * (3 * (5 - 4) / 6)", 1.0);
+        makeTest("2 * (3 * (5 - log(2, 16)) / 6)", 1.0);
         makeTest("Pi*2", Math.PI*2);
+        makeTest("14 / (7 / (3 + (1 + (3/2)) * 2 / 2 * 2) * (5 ^ 0 + 1))", 8.0);
     }
 
     public void makeTest(String expression, Double expected) throws ParserIllegalTokenValueException, ParserUnknownEntityException {
