@@ -25,7 +25,7 @@ public class NumbersUtilTest {
     }
 
     @Test
-    public void testCountingTensNumberss() {
+    public void testCountingTensNumbers() {
         makeTensNumbersTest(1.0, 1);
         makeTensNumbersTest(10.0, 2);
         makeTensNumbersTest(-1000.0, 4);
