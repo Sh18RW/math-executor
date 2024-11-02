@@ -7,4 +7,8 @@ public enum WordType {
 
     // Functions
     Log,
+    Sin,
+    Cos,
+    Tg,
+    Ctg,
 }

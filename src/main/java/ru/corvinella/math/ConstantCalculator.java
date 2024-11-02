@@ -11,6 +11,8 @@ public class ConstantCalculator implements ICalculator<ConstantExpression> {
         switch (expression.getConstantType()) {
             case Pi:
                 return Math.PI;
+            case E:
+                return Math.E;
         }
 
         return 0.0;

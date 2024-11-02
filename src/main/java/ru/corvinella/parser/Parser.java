@@ -260,6 +260,14 @@ public class Parser {
             // Functions
             case "log":
                 return WordType.Log;
+            case "sin":
+                return WordType.Sin;
+            case "cos":
+                return WordType.Cos;
+            case "tg":
+                return WordType.Tg;
+            case "ctg":
+                return WordType.Ctg;
             default:
                 throw new ParserIllegalTokenValueException(word, TokenType.Word, expression, index);
         }

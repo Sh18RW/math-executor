@@ -17,6 +17,17 @@ public class FunctionExpression extends ValueExpression {
             case Log:
                 functionType = Function.Log;
                 break;
+            case Sin:
+                functionType = Function.Sin;
+                break;
+            case Cos:
+                functionType = Function.Cos;
+                break;
+            case Tg:
+                functionType = Function.Tg;
+                break;
+            case Ctg:
+                functionType = Function.Ctg;
             default:
                 throw new IllegalStateException(
                         String.format("For some reason there is no realisation for %s function.", token.getValue()));
@@ -57,5 +68,9 @@ public class FunctionExpression extends ValueExpression {
 
     public enum Function {
         Log,
+        Sin,
+        Cos,
+        Tg,
+        Ctg
     }
 }
