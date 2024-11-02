@@ -1,6 +1,5 @@
 package ru.corvinella.math;
 
-import ru.corvinella.expressions.entries.Expression;
 import ru.corvinella.expressions.entries.SequenceExpression;
 
 /**

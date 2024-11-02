@@ -39,5 +39,6 @@ public class ConstantExpression extends ValueExpression {
 
     public enum Constant {
         Pi,
+        E,
     }
 }

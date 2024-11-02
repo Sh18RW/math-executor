@@ -114,6 +114,10 @@ public class ExpressionsTree {
                             expressionToAdd = new ConstantExpression(wordToken);
                             break;
                         case Log:
+                        case Sin:
+                        case Cos:
+                        case Tg:
+                        case Ctg:
                             FunctionExpression functionExpression = new FunctionExpression(wordToken);
                             ArgumentsExpression argumentsExpression = new ArgumentsExpression();
                             ExpressionState argumentsState = new ExpressionState(argumentsExpression, ExpressionState.ReadingType.Argument);

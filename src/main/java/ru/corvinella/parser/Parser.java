@@ -112,7 +112,7 @@ public class Parser {
         throw new IllegalStateException("Requested parsing result, but the parse method have not even been called!");
     }
 
-    private final void parseNumber() throws ParserIllegalTokenValueException {
+    private void parseNumber() throws ParserIllegalTokenValueException {
         if (currentParsingEntityType != TokenType.Number) {
             if (currentParsingEntity.length() != 0) {
                 packToken();
@@ -122,7 +122,7 @@ public class Parser {
         }
     }
 
-    private final void parseOperation() throws ParserIllegalTokenValueException {
+    private void parseOperation() throws ParserIllegalTokenValueException {
         if (currentParsingEntity.length() != 0) {
             packToken();
         }
@@ -130,7 +130,7 @@ public class Parser {
         currentParsingEntityType = TokenType.Operation;
     }
 
-    private final void parseParenthesis() throws ParserIllegalTokenValueException {
+    private void parseParenthesis() throws ParserIllegalTokenValueException {
         if (currentParsingEntity.length() != 0) {
             Token<?> token = packToken();
 
@@ -163,7 +163,7 @@ public class Parser {
         currentParsingEntityType = TokenType.ArgumentsSeparator;
     }
 
-    private final Token<?> packToken() throws ParserIllegalTokenValueException {
+    private Token<?> packToken() throws ParserIllegalTokenValueException {
         Token<?> token;
 
         if (currentParsingEntity.length() == 0) {
@@ -232,7 +232,7 @@ public class Parser {
         return token;
     }
 
-    private final OperationType getOperationTypeFromString(String operation) throws ParserIllegalTokenValueException {
+    private OperationType getOperationTypeFromString(String operation) throws ParserIllegalTokenValueException {
         switch (operation) {
             case "+":
                 return OperationType.Plus;
@@ -249,7 +249,7 @@ public class Parser {
         }
     }
 
-    private final WordType getWordTypeFromString(String word) throws ParserIllegalTokenValueException {
+    private WordType getWordTypeFromString(String word) throws ParserIllegalTokenValueException {
         switch (word) {
             // Constants
             case "pi":
@@ -260,12 +260,20 @@ public class Parser {
             // Functions
             case "log":
                 return WordType.Log;
+            case "sin":
+                return WordType.Sin;
+            case "cos":
+                return WordType.Cos;
+            case "tg":
+                return WordType.Tg;
+            case "ctg":
+                return WordType.Ctg;
             default:
                 throw new ParserIllegalTokenValueException(word, TokenType.Word, expression, index);
         }
     }
 
     private interface IProcessable {
-        public abstract void process() throws ParserIllegalTokenValueException;
+        void process() throws ParserIllegalTokenValueException;
     }
 }
