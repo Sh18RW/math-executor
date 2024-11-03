@@ -11,17 +11,18 @@ import static org.junit.Assert.assertEquals;
 public class NumbersUtilTest {
     @Test
     public void testMakePrettier() {
-        makePrettierTest(1.15, 0, 1.0);
-        makePrettierTest(1.13, 1, 1.1);
-        makePrettierTest(1.15, 1, 1.2);
-        makePrettierTest(1.15, 3, 1.15);
-        makePrettierTest(1.2345478, 4, 1.2345);
-        makePrettierTest(1.2345478, 5, 1.23455);
-        makePrettierTest(1.23454783747746123678, 10, 1.2345478375);
-        makePrettierTest(1.2345478374, 15, 1.2345478374);
-        makePrettierTest(1.0, 10, 1.0);
-        makePrettierTest(-10.123, 2, -10.12);
-        makePrettierTest(1.100293, 3, 1.1);
+        makePrettierTest(1.15, 0, "1");
+        makePrettierTest(1.13, 1, "1.1");
+        makePrettierTest(1.15, 1, "1.2");
+        makePrettierTest(1.15, 3, "1.15");
+        makePrettierTest(1.2345478, 4, "1.2345");
+        makePrettierTest(1.2345478, 5, "1.23455");
+        makePrettierTest(1.23454783747746123678, 10, "1.2345478375");
+        makePrettierTest(1.2345478374, 15, "1.2345478374");
+        makePrettierTest(1.0, 10, "1");
+        makePrettierTest(-10.123, 2, "-10.12");
+        makePrettierTest(1.100293, 3, "1.1");
+        makePrettierTest(1.000293, 2, "1");
     }
 
     @Test
@@ -42,8 +43,8 @@ public class NumbersUtilTest {
 
     }
 
-    private void makePrettierTest(Double number, int maxLength, Double expected) {
-        assertEquals(expected, Numbers.makeLookPrettier(number, maxLength));
+    private void makePrettierTest(Double number, int maxLength, String expected) {
+        assertEquals(expected, Numbers.getPrettierDouble(number, maxLength));
     }
 
     private void makeTensNumbersTest(Double number, int expected) {
