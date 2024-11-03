@@ -79,6 +79,48 @@ public class ExpressionsTest {
                         )
                 ),
                 "2 + 2 * 3 ^ 4 - 1 * 2");
+        assertExpression(
+                makeSequence(
+                        makeSequence(
+                                makeNumber(2.0),
+                                makeOperation(OperationType.Multiply),
+                                makeFunction(
+                                        WordType.Log,
+                                        makeSequence(
+                                                makeNumber(2.0)
+                                        ),
+                                        makeSequence(
+                                                makeNumber(4.0)
+                                        )
+                                )
+                        )
+                ),
+                "2log(2,4)"
+        );
+        assertExpression(
+                makeSequence(
+                        makeNumber(1.0),
+                        makeOperation(OperationType.Plus),
+                        makeSequence(
+                                makeNumber(2.0),
+                                makeOperation(OperationType.Multiply),
+                                makeFunction(
+                                        WordType.Log,
+                                        makeSequence(
+                                                makeNumber(2.0)
+                                        ),
+                                        makeSequence(
+                                                makeNumber(4.0)
+                                        )
+                                ),
+                                makeOperation(OperationType.Divide),
+                                makeNumber(3.0)
+                        ),
+                        makeOperation(OperationType.Minus),
+                        makeNumber(4.0)
+                ),
+                "1 + 2log(2,4) / 3 - 4"
+        );
     }
 
     @Test

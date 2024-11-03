@@ -96,6 +96,12 @@ public class ExpressionsTree {
                 break;
             case Number:
             case Word:
+                if (expressionState.waitedType == ExpressionState.ReadingTokenType.Operation) {
+                    processToken(new OperationToken(OperationType.Multiply, token.getTracer()));
+
+                    expressionState = getExpressionState();
+                }
+
                 boolean isNumber = token instanceof NumberToken;
 
                 boolean isNegative = expressionState.negativeValueNext;

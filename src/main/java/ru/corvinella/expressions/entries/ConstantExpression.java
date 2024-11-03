@@ -16,6 +16,9 @@ public class ConstantExpression extends ValueExpression {
             case Pi:
                 constantType = Constant.Pi;
                 break;
+            case E:
+                constantType = Constant.E;
+                break;
             default:
                 throw new IllegalStateException(
                         String.format("For some reason there is no realisation for %s constant.", token.getValue()));
