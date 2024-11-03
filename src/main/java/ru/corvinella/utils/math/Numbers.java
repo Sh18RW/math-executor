@@ -39,24 +39,25 @@ public class Numbers {
      * Makes double some prettier by removing some numbers after point.
      * @param number number to make prettier.
      * @param maxLength max numbers after point.
-     * @return number with minimum numbers after point.
+     * @return string with number and minimum numbers after point.
      */
-    public static Double makeLookPrettier(Double number, int maxLength) {
-        Long longValue = number.longValue();
-        double multiplier = Math.pow(10, Math.min(countNumbersAfterPoint(number), maxLength));
+    public static String getPrettierDouble(Double number, int maxLength) {
+        StringBuilder prettier = new StringBuilder(String.format("%." + maxLength + "f", number));
+        while (true) {
+            char chatAtTheEnd = prettier.charAt(prettier.length() - 1);
 
-        if (maxLength == 0) {
-            return (double) longValue;
+            if (chatAtTheEnd != '0') {
+                if (chatAtTheEnd == '.') {
+                    prettier.deleteCharAt(prettier.length() - 1);
+                }
+
+                break;
+            }
+
+            prettier.deleteCharAt(prettier.length() - 1);
         }
 
-        double afterPoint = number - longValue;
-        afterPoint *= multiplier;
-
-        if (lessThan(5.0, (afterPoint - (long) afterPoint) * 10, true)) {
-            afterPoint += 1;
-        }
-
-        return longValue.doubleValue() + ((double) ((long) afterPoint) / multiplier);
+        return prettier.toString();
     }
 
     /**
@@ -89,13 +90,13 @@ public class Numbers {
 
     /**
      * {@code countTensNumbers(1)} equals 1.
-     * {@code countTensNumbers(1000)} equals 3.
+     * {@code countTensNumbers(1000)} equals 4.
      * @return tens count in a number.
      */
     public static int countTensNumbers(double number) {
         int result = 0;
-        number = Math.abs(number * 10);
-        while (number >= 10) {
+        number = Math.abs(number);
+        while (number >= 1) {
             result += 1;
             number /= 10;
         }
@@ -107,14 +108,16 @@ public class Numbers {
      * @return count of numbers after a dot in a number.
      */
     public static int countNumbersAfterPoint(double number) {
-        int result = 0;
-        double multiplier = 1;
-
-        while (Math.abs((number * multiplier) - (long) (number * multiplier)) > 0) {
-            result += 1;
-            multiplier *= 10;
+        String string = Double.toString(number);
+        int indexOfDot = string.indexOf('.');
+        if (indexOfDot == -1) {
+            return 0;
         }
 
-        return result;
+        if (string.length() == indexOfDot + 2 && string.charAt(indexOfDot + 1) == '0') {
+            return 0;
+        }
+
+        return string.length() - indexOfDot - 1;
     }
 }
