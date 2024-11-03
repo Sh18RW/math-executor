@@ -4,7 +4,7 @@ import ru.corvinella.expressions.entries.Expression;
 import ru.corvinella.expressions.entries.OperationExpression;
 import ru.corvinella.expressions.entries.SequenceExpression;
 import ru.corvinella.expressions.entries.ValueExpression;
-import ru.corvinella.tokens.OperationType;
+import ru.corvinella.tokens.types.OperationType;
 
 /**
  * @author sh18rw

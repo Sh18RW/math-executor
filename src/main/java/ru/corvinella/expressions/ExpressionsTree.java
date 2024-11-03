@@ -2,6 +2,8 @@ package ru.corvinella.expressions;
 
 import ru.corvinella.expressions.entries.*;
 import ru.corvinella.tokens.*;
+import ru.corvinella.tokens.types.OperationType;
+import ru.corvinella.tokens.types.ParenthesisType;
 
 import java.util.LinkedList;
 import java.util.List;

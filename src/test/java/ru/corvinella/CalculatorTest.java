@@ -5,8 +5,8 @@ import ru.corvinella.expressions.ExpressionsTree;
 import ru.corvinella.expressions.entries.SequenceExpression;
 import ru.corvinella.math.Calculator;
 import ru.corvinella.parser.Parser;
-import ru.corvinella.parser.ParserIllegalTokenValueException;
-import ru.corvinella.parser.ParserUnknownEntityException;
+import ru.corvinella.parser.exceptions.ParserIllegalTokenValueException;
+import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
 import ru.corvinella.utils.math.Numbers;
 
 

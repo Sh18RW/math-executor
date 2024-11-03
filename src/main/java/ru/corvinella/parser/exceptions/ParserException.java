@@ -1,4 +1,4 @@
-package ru.corvinella.parser;
+package ru.corvinella.parser.exceptions;
 
 public class ParserException extends Exception {
     public ParserException(String errorText, String expression, int tracer) {

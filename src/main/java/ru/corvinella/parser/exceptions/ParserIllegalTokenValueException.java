@@ -1,6 +1,6 @@
-package ru.corvinella.parser;
+package ru.corvinella.parser.exceptions;
 
-import ru.corvinella.tokens.TokenType;
+import ru.corvinella.tokens.types.TokenType;
 
 public class ParserIllegalTokenValueException extends ParserException{
     public ParserIllegalTokenValueException(String value, TokenType parsingType, String expression, int tracer) {

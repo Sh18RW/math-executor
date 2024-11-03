@@ -2,17 +2,19 @@ package ru.corvinella.parser;
 
 import java.util.*;
 
+import ru.corvinella.parser.exceptions.ParserIllegalTokenValueException;
+import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
 import ru.corvinella.tokens.ArgumentsParenthesisToken;
-import ru.corvinella.tokens.ArgumentsSeparator;
+import ru.corvinella.tokens.ArgumentsSeparatorToken;
 import ru.corvinella.tokens.NumberToken;
 import ru.corvinella.tokens.OperationToken;
-import ru.corvinella.tokens.OperationType;
+import ru.corvinella.tokens.types.OperationType;
 import ru.corvinella.tokens.ParenthesisToken;
-import ru.corvinella.tokens.ParenthesisType;
+import ru.corvinella.tokens.types.ParenthesisType;
 import ru.corvinella.tokens.Token;
-import ru.corvinella.tokens.TokenType;
+import ru.corvinella.tokens.types.TokenType;
 import ru.corvinella.tokens.WordToken;
-import ru.corvinella.tokens.WordType;
+import ru.corvinella.tokens.types.WordType;
 
 /**
  * Parses input expressions to list of {@link ru.corvinella.tokens.Token}.
@@ -217,7 +219,7 @@ public class Parser {
                 token = new WordToken(wordType, index);
                 break;
             case ArgumentsSeparator:
-                token = new ArgumentsSeparator(index);
+                token = new ArgumentsSeparatorToken(index);
                 break;
             default:
                 // I am not sure that it can even happen.

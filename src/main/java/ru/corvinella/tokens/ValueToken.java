@@ -1,5 +1,7 @@
 package ru.corvinella.tokens;
 
+import ru.corvinella.tokens.types.TokenType;
+
 /**
  * @author sh18rw
  */

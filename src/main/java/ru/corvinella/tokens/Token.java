@@ -1,5 +1,7 @@
 package ru.corvinella.tokens;
 
+import ru.corvinella.tokens.types.TokenType;
+
 public abstract class Token <T> {
     private final T value;
     private final int tracer;

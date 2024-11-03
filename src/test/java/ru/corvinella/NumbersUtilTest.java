@@ -44,7 +44,7 @@ public class NumbersUtilTest {
     }
 
     private void makePrettierTest(Double number, int maxLength, String expected) {
-        assertEquals(expected, Numbers.getPrettierDouble(number, maxLength));
+        assertEquals(expected, Numbers.getPrettierDoubleAsString(number, maxLength));
     }
 
     private void makeTensNumbersTest(Double number, int expected) {

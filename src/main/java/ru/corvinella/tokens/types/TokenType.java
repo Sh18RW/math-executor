@@ -1,4 +1,4 @@
-package ru.corvinella.tokens;
+package ru.corvinella.tokens.types;
 
 public enum TokenType {
     Number,

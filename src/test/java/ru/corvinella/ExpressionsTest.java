@@ -4,9 +4,11 @@ import org.junit.Test;
 import ru.corvinella.expressions.ExpressionsTree;
 import ru.corvinella.expressions.entries.*;
 import ru.corvinella.parser.Parser;
-import ru.corvinella.parser.ParserIllegalTokenValueException;
-import ru.corvinella.parser.ParserUnknownEntityException;
+import ru.corvinella.parser.exceptions.ParserIllegalTokenValueException;
+import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
 import ru.corvinella.tokens.*;
+import ru.corvinella.tokens.types.OperationType;
+import ru.corvinella.tokens.types.WordType;
 
 import static org.junit.Assert.assertEquals;
 
