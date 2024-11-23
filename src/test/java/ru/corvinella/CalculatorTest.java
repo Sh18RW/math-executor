@@ -73,6 +73,6 @@ public class CalculatorTest {
         }
 
         // I am not an English man, I don't know how to write this.
-        fail(String.format("Waited for not expected %f which mustn't equals %s!", actual, expected));
+        fail(String.format("Waited for not expected %f which mustn't equal to %s!", actual, expected));
     }
 }
