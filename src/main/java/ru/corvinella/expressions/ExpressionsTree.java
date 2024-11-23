@@ -2,6 +2,8 @@ package ru.corvinella.expressions;
 
 import ru.corvinella.expressions.entries.*;
 import ru.corvinella.tokens.*;
+import ru.corvinella.tokens.types.OperationType;
+import ru.corvinella.tokens.types.ParenthesisType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -94,6 +96,12 @@ public class ExpressionsTree {
                 break;
             case Number:
             case Word:
+                if (expressionState.waitedType == ExpressionState.ReadingTokenType.Operation) {
+                    processToken(new OperationToken(OperationType.Multiply, token.getTracer()));
+
+                    expressionState = getExpressionState();
+                }
+
                 boolean isNumber = token instanceof NumberToken;
 
                 boolean isNegative = expressionState.negativeValueNext;

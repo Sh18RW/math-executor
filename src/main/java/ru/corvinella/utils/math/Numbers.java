@@ -10,10 +10,10 @@ public class Numbers {
 
     /**
      * Checks  for equaling numbers with some rate.
-     * @param first first number.
-     * @param second second number.
-     * @param rate maximum diff between two numbers.
-     * @return true if diff is lower than a rate.
+     * @param first the first number.
+     * @param second the second number.
+     * @param rate a maximum diff between two numbers.
+     * @return true if a diff is lower than a rate.
      */
     public static boolean equals(Double first, Double second, Double rate) {
         if (rate < 0) {
@@ -27,9 +27,9 @@ public class Numbers {
     /**
      * Checks  for equaling numbers with some rate.
      * Calls {@link Numbers#equals(Double, Double, Double)} with {@link Numbers#DEFAULT_RATE}.
-     * @param first first number.
-     * @param second second number.
-     * @return true if diff is lower than the {@link Numbers#DEFAULT_RATE}.
+     * @param first the first number.
+     * @param second the second number.
+     * @return true if a diff is lower than the {@link Numbers#DEFAULT_RATE}.
      */
     public static boolean equals(Double first, Double second) {
         return Numbers.equals(first, second, Numbers.DEFAULT_RATE);
@@ -38,10 +38,10 @@ public class Numbers {
     /**
      * Makes double some prettier by removing some numbers after point.
      * @param number number to make prettier.
-     * @param maxLength max numbers after point.
-     * @return string with number and minimum numbers after point.
+     * @param maxLength max numbers after a point.
+     * @return a string with number and minimum numbers after point.
      */
-    public static String getPrettierDouble(Double number, int maxLength) {
+    public static String getPrettierDoubleAsString(Double number, int maxLength) {
         StringBuilder prettier = new StringBuilder(String.format("%." + maxLength + "f", number));
         while (true) {
             char chatAtTheEnd = prettier.charAt(prettier.length() - 1);

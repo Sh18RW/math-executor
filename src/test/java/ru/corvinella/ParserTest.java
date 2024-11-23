@@ -2,9 +2,12 @@ package ru.corvinella;
 
 import org.junit.Test;
 import ru.corvinella.parser.Parser;
-import ru.corvinella.parser.ParserIllegalTokenValueException;
-import ru.corvinella.parser.ParserUnknownEntityException;
+import ru.corvinella.parser.exceptions.ParserIllegalTokenValueException;
+import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
 import ru.corvinella.tokens.*;
+import ru.corvinella.tokens.types.OperationType;
+import ru.corvinella.tokens.types.ParenthesisType;
+import ru.corvinella.tokens.types.WordType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +40,7 @@ public class ParserTest {
                 new WordToken(WordType.Log, 0),
                 new ArgumentsParenthesisToken(ParenthesisType.Open, 0),
                 new NumberToken(2.0, 0),
-                new ArgumentsSeparator(0),
+                new ArgumentsSeparatorToken(0),
                 new NumberToken(4.0, 0),
                 new ArgumentsParenthesisToken(ParenthesisType.Close, 0)
         ), packParser("log(2, 4)"));

@@ -4,9 +4,11 @@ import org.junit.Test;
 import ru.corvinella.expressions.ExpressionsTree;
 import ru.corvinella.expressions.entries.*;
 import ru.corvinella.parser.Parser;
-import ru.corvinella.parser.ParserIllegalTokenValueException;
-import ru.corvinella.parser.ParserUnknownEntityException;
+import ru.corvinella.parser.exceptions.ParserIllegalTokenValueException;
+import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
 import ru.corvinella.tokens.*;
+import ru.corvinella.tokens.types.OperationType;
+import ru.corvinella.tokens.types.WordType;
 
 import static org.junit.Assert.assertEquals;
 
@@ -77,6 +79,48 @@ public class ExpressionsTest {
                         )
                 ),
                 "2 + 2 * 3 ^ 4 - 1 * 2");
+        assertExpression(
+                makeSequence(
+                        makeSequence(
+                                makeNumber(2.0),
+                                makeOperation(OperationType.Multiply),
+                                makeFunction(
+                                        WordType.Log,
+                                        makeSequence(
+                                                makeNumber(2.0)
+                                        ),
+                                        makeSequence(
+                                                makeNumber(4.0)
+                                        )
+                                )
+                        )
+                ),
+                "2log(2,4)"
+        );
+        assertExpression(
+                makeSequence(
+                        makeNumber(1.0),
+                        makeOperation(OperationType.Plus),
+                        makeSequence(
+                                makeNumber(2.0),
+                                makeOperation(OperationType.Multiply),
+                                makeFunction(
+                                        WordType.Log,
+                                        makeSequence(
+                                                makeNumber(2.0)
+                                        ),
+                                        makeSequence(
+                                                makeNumber(4.0)
+                                        )
+                                ),
+                                makeOperation(OperationType.Divide),
+                                makeNumber(3.0)
+                        ),
+                        makeOperation(OperationType.Minus),
+                        makeNumber(4.0)
+                ),
+                "1 + 2log(2,4) / 3 - 4"
+        );
     }
 
     @Test
