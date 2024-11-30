@@ -4,6 +4,7 @@ import ru.corvinella.expressions.entries.Expression;
 import ru.corvinella.expressions.entries.OperationExpression;
 import ru.corvinella.expressions.entries.SequenceExpression;
 import ru.corvinella.expressions.entries.ValueExpression;
+import ru.corvinella.math.exceptions.CalculatorException;
 import ru.corvinella.tokens.types.OperationType;
 
 /**
@@ -17,7 +18,7 @@ public class SequenceCalculator implements ICalculator<SequenceExpression> {
     }
 
     @Override
-    public Double calculate(SequenceExpression expression) {
+    public Double calculate(SequenceExpression expression) throws CalculatorException {
         Double result = 0.0;
         OperationType currentOperation = OperationType.Plus;
 

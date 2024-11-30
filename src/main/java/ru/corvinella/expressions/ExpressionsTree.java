@@ -1,6 +1,9 @@
 package ru.corvinella.expressions;
 
 import ru.corvinella.expressions.entries.*;
+import ru.corvinella.expressions.exceptions.ExpressionException;
+import ru.corvinella.expressions.exceptions.UnknownWordExpressionException;
+import ru.corvinella.expressions.exceptions.WrongExpressionSequenceException;
 import ru.corvinella.tokens.*;
 import ru.corvinella.tokens.types.OperationType;
 import ru.corvinella.tokens.types.ParenthesisType;
@@ -22,7 +25,7 @@ public class ExpressionsTree {
         this.tokens = tokens;
     }
 
-    public void build() {
+    public void build() throws ExpressionException {
         for (Token<?> token: tokens) {
             processToken(token);
         }
@@ -30,7 +33,7 @@ public class ExpressionsTree {
         root = expressionStates.get(0).pointer;
     }
 
-    private void processToken(Token<?> token) {
+    private void processToken(Token<?> token) throws WrongExpressionSequenceException, UnknownWordExpressionException {
         Expression expressionToAdd = null;
         boolean appendExpression = true;
         ExpressionState expressionState = getExpressionState();
@@ -46,8 +49,7 @@ public class ExpressionsTree {
                         return;
                     }
 
-                    // TODO: make expression tree exception
-                    throw new IllegalStateException();
+                    throw new WrongExpressionSequenceException("Waited for number, but got operator", token);
                 }
 
                 boolean appendOperation = true;
@@ -116,32 +118,23 @@ public class ExpressionsTree {
                 } else {
                     WordToken wordToken = (WordToken) token;
 
-                    switch (wordToken.getValue()) {
-                        case Pi:
-                        case E:
-                            expressionToAdd = new ConstantExpression(wordToken);
-                            break;
-                        case Log:
-                        case Sin:
-                        case Cos:
-                        case Tg:
-                        case Ctg:
-                            FunctionExpression functionExpression = new FunctionExpression(wordToken);
-                            ArgumentsExpression argumentsExpression = new ArgumentsExpression();
-                            ExpressionState argumentsState = new ExpressionState(argumentsExpression, ExpressionState.ReadingType.Argument);
-                            expressionStates.add(argumentsState);
-                            SequenceExpression sequenceExpression = new SequenceExpression();
-                            ExpressionState newState = new ExpressionState(sequenceExpression, ExpressionState.ReadingType.Sum);
-                            newState.ignoreOpenParenthesis = true;
-                            expressionStates.add(newState);
-                            argumentsExpression.appendExpression(sequenceExpression);
+                    if (FunctionExpression.supportedFunctions.contains(wordToken.getValue())) {
+                        FunctionExpression functionExpression = new FunctionExpression(wordToken);
+                        ArgumentsExpression argumentsExpression = new ArgumentsExpression(wordToken);
+                        ExpressionState argumentsState = new ExpressionState(argumentsExpression, ExpressionState.ReadingType.Argument);
+                        expressionStates.add(argumentsState);
+                        SequenceExpression sequenceExpression = new SequenceExpression();
+                        ExpressionState newState = new ExpressionState(sequenceExpression, ExpressionState.ReadingType.Sum);
+                        newState.ignoreOpenParenthesis = true;
+                        expressionStates.add(newState);
+                        argumentsExpression.appendExpression(sequenceExpression);
 
-                            functionExpression.addArguments(argumentsExpression);
-                            expressionToAdd = functionExpression;
-                            break;
-                        default:
-                            // TODO: a normal exception
-                            throw new IllegalStateException();
+                        functionExpression.addArguments(argumentsExpression);
+                        expressionToAdd = functionExpression;
+                    } else if (ConstantExpression.supportedConstants.contains(wordToken.getValue())) {
+                        expressionToAdd = new ConstantExpression(wordToken);
+                    } else {
+                        throw new UnknownWordExpressionException(wordToken);
                     }
                 }
 

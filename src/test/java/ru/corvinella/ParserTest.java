@@ -7,7 +7,6 @@ import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
 import ru.corvinella.tokens.*;
 import ru.corvinella.tokens.types.OperationType;
 import ru.corvinella.tokens.types.ParenthesisType;
-import ru.corvinella.tokens.types.WordType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +34,9 @@ public class ParserTest {
 
     @Test
     public void testSimpleWords() {
-        assertEquals(Arrays.asList(new WordToken(WordType.Pi, 0)), packParser("Pi"));
+        assertEquals(Arrays.asList(new WordToken("pi", 0)), packParser("Pi"));
         assertEquals(Arrays.asList(
-                new WordToken(WordType.Log, 0),
+                new WordToken("log", 0),
                 new ArgumentsParenthesisToken(ParenthesisType.Open, 0),
                 new NumberToken(2.0, 0),
                 new ArgumentsSeparatorToken(0),

@@ -3,12 +3,16 @@ package ru.corvinella;
 import org.junit.Test;
 import ru.corvinella.expressions.ExpressionsTree;
 import ru.corvinella.expressions.entries.*;
+import ru.corvinella.expressions.exceptions.ExpressionException;
 import ru.corvinella.parser.Parser;
 import ru.corvinella.parser.exceptions.ParserIllegalTokenValueException;
 import ru.corvinella.parser.exceptions.ParserUnknownEntityException;
-import ru.corvinella.tokens.*;
+import ru.corvinella.tokens.NumberToken;
+import ru.corvinella.tokens.OperationToken;
+import ru.corvinella.tokens.ParenthesisToken;
+import ru.corvinella.tokens.WordToken;
 import ru.corvinella.tokens.types.OperationType;
-import ru.corvinella.tokens.types.WordType;
+import ru.corvinella.tokens.types.ParenthesisType;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +21,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ExpressionsTest {
     @Test
-    public void testSimpleNumberExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    public void testSimpleNumberExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         assertExpression(makeSequence(makeNumber(10.0)), "10");
         assertExpression(makeSequence(makeNumber(1.213)), "1.213");
         assertExpression(makeSequence(makeNumber(-20.0)), "-20");
@@ -25,7 +29,7 @@ public class ExpressionsTest {
     }
 
     @Test
-    public void testSimpleSequenceExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    public void testSimpleSequenceExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         assertExpression(
                 makeSequence(makeNumber(1.0), makeOperation(OperationType.Plus), makeNumber(2.0)),
                 "1 + 2");
@@ -42,7 +46,7 @@ public class ExpressionsTest {
     }
 
     @Test
-    public void testSimpleSequencesExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    public void testSimpleSequencesExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         assertExpression(
                 makeSequence(
                         makeNumber(2.0),
@@ -85,7 +89,7 @@ public class ExpressionsTest {
                                 makeNumber(2.0),
                                 makeOperation(OperationType.Multiply),
                                 makeFunction(
-                                        WordType.Log,
+                                        "log",
                                         makeSequence(
                                                 makeNumber(2.0)
                                         ),
@@ -105,7 +109,7 @@ public class ExpressionsTest {
                                 makeNumber(2.0),
                                 makeOperation(OperationType.Multiply),
                                 makeFunction(
-                                        WordType.Log,
+                                        "log",
                                         makeSequence(
                                                 makeNumber(2.0)
                                         ),
@@ -124,10 +128,10 @@ public class ExpressionsTest {
     }
 
     @Test
-    public void testFunctionExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    public void testFunctionExpressions() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         assertExpression(makeSequence(
                         makeFunction(
-                                WordType.Log,
+                                "log",
                                 makeSequence(
                                         makeNumber(2.0)
                                 ),
@@ -141,7 +145,7 @@ public class ExpressionsTest {
                         makeSequence(
                                 makeSequence(
                                         makeFunction(
-                                                WordType.Log,
+                                                "log",
                                                 makeSequence(
                                                         makeNumber(2.0)
                                                 ),
@@ -159,7 +163,7 @@ public class ExpressionsTest {
                 "(log(2, 4) + 1) * 3");
         assertExpression(makeSequence(
                         makeFunction(
-                                WordType.Log,
+                                "log",
                                 makeSequence(
                                         makeSequence(
                                                 makeNumber(2.0),
@@ -180,7 +184,7 @@ public class ExpressionsTest {
                 "log(2*3,12 - -12 / -4)");
         assertExpression(makeSequence(
                         makeFunction(
-                                WordType.Log,
+                                "log",
                                 makeSequence(
                                         makeSequence(
                                                 makeSequence(
@@ -208,24 +212,24 @@ public class ExpressionsTest {
     }
 
     @Test
-    public void testConstants() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    public void testConstants() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         assertExpression(
                 makeSequence(
-                        makeConstant(WordType.Pi)
+                        makeConstant("pi")
                 ),
                 "Pi");
         assertExpression(
                 makeSequence(
-                        makeConstant(WordType.Pi),
+                        makeConstant("pi"),
                         makeOperation(OperationType.Plus),
-                        makeConstant(WordType.Pi)
+                        makeConstant("pi")
                 ),
                 "Pi + Pi"
         );
     }
 
     @Test
-    public void testParenthesis() throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    public void testParenthesis() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         assertExpression(
                 makeSequence(
                         makeSequence(
@@ -278,17 +282,17 @@ public class ExpressionsTest {
         );
     }
 
-    public ConstantExpression makeConstant(WordType wordType) {
-        return new ConstantExpression(new WordToken(wordType, 0));
+    public ConstantExpression makeConstant(String constantName) {
+        return new ConstantExpression(new WordToken(constantName, 0));
     }
 
-    private void assertExpression(Expression expected, String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    private void assertExpression(Expression expected, String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         Expression parsed = makeExpression(expression);
 
         assertEquals(expected, parsed);
     }
 
-    private Expression makeExpression(String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException {
+    private Expression makeExpression(String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
         Parser parser = new Parser(expression);
         parser.parse();
         ExpressionsTree expressionsTree = new ExpressionsTree(parser.getResult());
@@ -320,9 +324,9 @@ public class ExpressionsTest {
         return new OperationExpression(new OperationToken(operationType, 0));
     }
 
-    private FunctionExpression makeFunction(WordType type, Expression... arguments) {
-        FunctionExpression functionExpression = new FunctionExpression(new WordToken(type, 0));
-        ArgumentsExpression argumentsExpression = new ArgumentsExpression();
+    private FunctionExpression makeFunction(String functionName, Expression... arguments) {
+        FunctionExpression functionExpression = new FunctionExpression(new WordToken(functionName, 0));
+        ArgumentsExpression argumentsExpression = new ArgumentsExpression(new ParenthesisToken(ParenthesisType.Open, 0));
 
         for (Expression argument : arguments) {
             argumentsExpression.appendExpression(argument);
