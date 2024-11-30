@@ -30,7 +30,7 @@ public class CalculatorTest {
         makeTest("2 + (2 + 2) / (2 ^ 2)", 3.0);
         makeTest("2 * (3 * (5 - log(2, 16)) / 6)", 1.0);
         makeTest("Pi*2", Math.PI*2);
-        makeTest("14 / (7 / (3 + (1 + (3/2)) * 2 / 2 * 2) * (5 ^ 0 + 1))", 8.0);
+        makeTest("14 / (7 / (3 + (1 + (3/log(2, 4))) * 2 / 2 * 2) * (5 ^ 0 + 1))", 8.0);
         makeTest("1 + 2log(2,4) / 3 - 4", 1.0 + 2.0 * 2.0 / 3.0 - 4.0);
         makeTest("3*e", 3 * Math.E);
     }
