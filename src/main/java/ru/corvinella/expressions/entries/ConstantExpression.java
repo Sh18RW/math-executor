@@ -16,7 +16,7 @@ public class ConstantExpression extends ValueExpression {
         this.token = wordToken;
 
         if (!supportedConstants.contains(token.getValue())) {
-            throw new IllegalStateException("Developer not implemented all constants, please contact them and rollback version until it is fixed.");
+            throw new IllegalStateException();
         }
     }
 

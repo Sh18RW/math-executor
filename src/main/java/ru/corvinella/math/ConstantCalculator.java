@@ -19,7 +19,7 @@ public class ConstantCalculator implements ICalculator<ConstantExpression> {
         processors.put("e", Math.E);
 
         if (!processors.keySet().containsAll(ConstantExpression.supportedConstants)) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Developer not implemented all constants, please contact them and rollback version until it is fixed.");
         }
     }
 

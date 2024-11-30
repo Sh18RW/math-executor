@@ -27,7 +27,7 @@ public class FunctionCalculator implements ICalculator<FunctionExpression> {
         processors.put("ctg", this::calculateCtg);
 
         if (!processors.keySet().containsAll(FunctionExpression.supportedFunctions)) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Developer not implemented all functions, please contact them and rollback version until it is fixed.");
         }
     }
 
