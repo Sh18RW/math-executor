@@ -1,5 +1,8 @@
 package ru.corvinella.expressions.entries;
 
+import ru.corvinella.tokens.ParenthesisToken;
+import ru.corvinella.tokens.Token;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,9 +11,11 @@ import java.util.List;
  */
 public class ArgumentsExpression extends Expression {
     private final List<Expression> arguments;
+    private final Token<?> token;
 
-    public ArgumentsExpression() {
+    public ArgumentsExpression(Token<?> token) {
         this.arguments = new LinkedList<>();
+        this.token = token;
     }
 
     public final void appendExpression(Expression valueExpression) {
@@ -23,6 +28,10 @@ public class ArgumentsExpression extends Expression {
 
     public final Expression getArgument(int index) {
         return arguments.get(index);
+    }
+
+    public Token<?> getToken() {
+        return token;
     }
 
     @Override

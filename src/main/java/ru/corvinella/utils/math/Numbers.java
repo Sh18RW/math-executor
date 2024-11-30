@@ -25,7 +25,7 @@ public class Numbers {
     }
 
     /**
-     * Checks  for equaling numbers with some rate.
+     * Checks for equaling to numbers with some rate.
      * Calls {@link Numbers#equals(Double, Double, Double)} with {@link Numbers#DEFAULT_RATE}.
      * @param first the first number.
      * @param second the second number.
@@ -89,8 +89,8 @@ public class Numbers {
     }
 
     /**
-     * {@code countTensNumbers(1)} equals 1.
-     * {@code countTensNumbers(1000)} equals 4.
+     * {@code countTensNumbers(1)} equals to 1.
+     * {@code countTensNumbers(1000)} equals to 4.
      * @return tens count in a number.
      */
     public static int countTensNumbers(double number) {

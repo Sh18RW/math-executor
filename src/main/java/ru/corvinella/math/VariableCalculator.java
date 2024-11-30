@@ -1,6 +1,7 @@
 package ru.corvinella.math;
 
 import ru.corvinella.expressions.entries.*;
+import ru.corvinella.math.exceptions.CalculatorException;
 
 /**
  * @author sh18rw
@@ -15,7 +16,7 @@ public class VariableCalculator implements ICalculator<ValueExpression> {
     }
 
     @Override
-    public Double calculate(ValueExpression expression) {
+    public Double calculate(ValueExpression expression) throws CalculatorException {
         if (expression instanceof NumberExpression) {
             NumberExpression numberExpression = (NumberExpression) expression;
 
@@ -40,7 +41,7 @@ public class VariableCalculator implements ICalculator<ValueExpression> {
             return Calculator.getInstance().calculate(sequenceExpression);
         }
 
-        // TODO: make an specific exception for calculator
-        throw new IllegalArgumentException();
+        // It should not ever happen.
+        throw new IllegalStateException("For some reason there is an unimplemented processor for value expression.");
     }
 }

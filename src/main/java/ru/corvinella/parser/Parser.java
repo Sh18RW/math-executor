@@ -14,7 +14,6 @@ import ru.corvinella.tokens.types.ParenthesisType;
 import ru.corvinella.tokens.Token;
 import ru.corvinella.tokens.types.TokenType;
 import ru.corvinella.tokens.WordToken;
-import ru.corvinella.tokens.types.WordType;
 
 /**
  * Parses input expressions to list of {@link ru.corvinella.tokens.Token}.
@@ -215,8 +214,7 @@ public class Parser {
                 }
                 break;
             case Word:
-                WordType wordType = getWordTypeFromString(currentParsingEntity.toString());
-                token = new WordToken(wordType, index);
+                token = new WordToken(currentParsingEntity.toString(), index);
                 break;
             case ArgumentsSeparator:
                 token = new ArgumentsSeparatorToken(index);
@@ -248,30 +246,6 @@ public class Parser {
                 return OperationType.Degree;
             default:
                 throw new ParserIllegalTokenValueException(operation, TokenType.Operation, expression, index);
-        }
-    }
-
-    private WordType getWordTypeFromString(String word) throws ParserIllegalTokenValueException {
-        switch (word) {
-            // Constants
-            case "pi":
-                return WordType.Pi;
-            case "e":
-                return WordType.E;
-            
-            // Functions
-            case "log":
-                return WordType.Log;
-            case "sin":
-                return WordType.Sin;
-            case "cos":
-                return WordType.Cos;
-            case "tg":
-                return WordType.Tg;
-            case "ctg":
-                return WordType.Ctg;
-            default:
-                throw new ParserIllegalTokenValueException(word, TokenType.Word, expression, index);
         }
     }
 

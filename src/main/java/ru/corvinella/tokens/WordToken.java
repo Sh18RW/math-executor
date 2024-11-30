@@ -1,10 +1,9 @@
 package ru.corvinella.tokens;
 
 import ru.corvinella.tokens.types.TokenType;
-import ru.corvinella.tokens.types.WordType;
 
-public class WordToken extends ValueToken<WordType> {
-    public WordToken(WordType value, int tracer) {
-        super(value, TokenType.Word, tracer);
+public class WordToken extends ValueToken<String> {
+    public WordToken(String value, int tracer) {
+        super(value.toLowerCase(), TokenType.Word, tracer);
     }
 }

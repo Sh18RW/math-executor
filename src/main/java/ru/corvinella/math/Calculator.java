@@ -1,6 +1,7 @@
 package ru.corvinella.math;
 
 import ru.corvinella.expressions.entries.SequenceExpression;
+import ru.corvinella.math.exceptions.CalculatorException;
 
 /**
  * @author sh18rw
@@ -17,7 +18,7 @@ public class Calculator {
         return instance;
     }
 
-    public Double calculate(SequenceExpression expression) {
+    public Double calculate(SequenceExpression expression) throws CalculatorException {
         return sequenceCalculator.calculate(expression);
     }
 }

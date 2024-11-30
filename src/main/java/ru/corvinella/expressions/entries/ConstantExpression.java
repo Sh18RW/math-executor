@@ -2,31 +2,26 @@ package ru.corvinella.expressions.entries;
 
 import ru.corvinella.tokens.WordToken;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author sh18rw
  */
 public class ConstantExpression extends ValueExpression {
-    private final Constant constantType;
+    public static final List<String> supportedConstants = Arrays.asList("pi", "e");
     private final WordToken token;
 
     public ConstantExpression(WordToken wordToken) {
         this.token = wordToken;
 
-        switch (wordToken.getValue()) {
-            case Pi:
-                constantType = Constant.Pi;
-                break;
-            case E:
-                constantType = Constant.E;
-                break;
-            default:
-                throw new IllegalStateException(
-                        String.format("For some reason there is no realisation for %s constant.", token.getValue()));
+        if (!supportedConstants.contains(token.getValue())) {
+            throw new IllegalStateException("Developer not implemented all constants, please contact them and rollback version until it is fixed.");
         }
     }
 
-    public Constant getConstantType() {
-        return constantType;
+    public String getConstantName() {
+        return token.getValue();
     }
 
     @Override
@@ -37,11 +32,6 @@ public class ConstantExpression extends ValueExpression {
 
         ConstantExpression constantExpression = (ConstantExpression) obj;
 
-        return constantExpression.constantType == this.constantType;
-    }
-
-    public enum Constant {
-        Pi,
-        E,
+        return constantExpression.getConstantName().equals(this.getConstantName());
     }
 }
