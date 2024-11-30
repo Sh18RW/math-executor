@@ -140,6 +140,15 @@ public class ExpressionsTest {
                         )
                 ),
                 "log(2, 4)");
+        assertExpression(makeSequence(
+                        makeFunction(
+                                "tg",
+                                makeSequence(
+                                        makeConstant("Pi")
+                                )
+                        )
+                ),
+                "tg(Pi)");
         assertExpression(
                 makeSequence(
                         makeSequence(

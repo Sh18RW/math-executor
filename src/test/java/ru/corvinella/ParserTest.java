@@ -9,6 +9,7 @@ import ru.corvinella.tokens.types.OperationType;
 import ru.corvinella.tokens.types.ParenthesisType;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -17,24 +18,24 @@ import static org.junit.Assert.assertNotEquals;
 public class ParserTest {
     @Test
     public void testSimpleNumberParsing() {
-        assertEquals(Arrays.asList(new NumberToken(0.0, 0)), packParser("0"));
-        assertEquals(Arrays.asList(new NumberToken(123.0, 0)), packParser("123"));
-        assertEquals(Arrays.asList(new NumberToken(101010101.90009, 0)), packParser("101010101.90009"));
-        assertNotEquals(Arrays.asList(new NumberToken(-1.0, 0)), packParser("-1"));
+        assertEquals(Collections.singletonList(new NumberToken(0.0, 0)), packParser("0"));
+        assertEquals(Collections.singletonList(new NumberToken(123.0, 0)), packParser("123"));
+        assertEquals(Collections.singletonList(new NumberToken(101010101.90009, 0)), packParser("101010101.90009"));
+        assertNotEquals(Collections.singletonList(new NumberToken(-1.0, 0)), packParser("-1"));
     }
 
     @Test
     public void testSimpleOperationParsing() {
-        assertEquals(Arrays.asList(new OperationToken(OperationType.Plus, 0)), packParser("+"));
-        assertEquals(Arrays.asList(new OperationToken(OperationType.Minus, 0)), packParser("-"));
-        assertEquals(Arrays.asList(new OperationToken(OperationType.Multiply, 0)), packParser("*"));
-        assertEquals(Arrays.asList(new OperationToken(OperationType.Divide, 0)), packParser("/"));
-        assertEquals(Arrays.asList(new OperationToken(OperationType.Degree, 0)), packParser("^"));
+        assertEquals(Collections.singletonList(new OperationToken(OperationType.Plus, 0)), packParser("+"));
+        assertEquals(Collections.singletonList(new OperationToken(OperationType.Minus, 0)), packParser("-"));
+        assertEquals(Collections.singletonList(new OperationToken(OperationType.Multiply, 0)), packParser("*"));
+        assertEquals(Collections.singletonList(new OperationToken(OperationType.Divide, 0)), packParser("/"));
+        assertEquals(Collections.singletonList(new OperationToken(OperationType.Degree, 0)), packParser("^"));
     }
 
     @Test
     public void testSimpleWords() {
-        assertEquals(Arrays.asList(new WordToken("pi", 0)), packParser("Pi"));
+        assertEquals(Collections.singletonList(new WordToken("pi", 0)), packParser("Pi"));
         assertEquals(Arrays.asList(
                 new WordToken("log", 0),
                 new ArgumentsParenthesisToken(ParenthesisType.Open, 0),
