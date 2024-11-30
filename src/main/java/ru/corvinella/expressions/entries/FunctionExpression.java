@@ -18,7 +18,7 @@ public class FunctionExpression extends ValueExpression {
         this.token = token;
 
         if (!supportedFunctions.contains(token.getValue())) {
-            throw new IllegalStateException("Developer not implemented all functions, please contact them and rollback version until it is fixed.");
+            throw new IllegalStateException();
         }
     }
 
