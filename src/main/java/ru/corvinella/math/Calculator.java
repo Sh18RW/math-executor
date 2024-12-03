@@ -8,14 +8,19 @@ import ru.corvinella.math.exceptions.CalculatorException;
  */
 public class Calculator {
     private static final Calculator instance;
-    private static final SequenceCalculator sequenceCalculator;
 
     static {
         instance = new Calculator();
-        sequenceCalculator = new SequenceCalculator();
     }
+
+    private final SequenceCalculator sequenceCalculator;
+
     public static Calculator getInstance() {
         return instance;
+    }
+
+    private Calculator() {
+        sequenceCalculator = new SequenceCalculator();
     }
 
     public Double calculate(SequenceExpression expression) throws CalculatorException {
