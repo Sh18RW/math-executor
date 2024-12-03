@@ -39,19 +39,18 @@ Library contains:
    **Doesn't check for valid sequence at all. Only critical misspells.**
 3. Calculator class.
     ```java
-    public class App {
-         public static void calculate(Expression expression) {
-             Calculator calculator = new Calculator();
-             double result;
-             try {
-                 result = calculator.calculate((SequenceExpression) expression);
-             } catch (CalculatorException e) {
-                 // process exception
-             }
-
-             System.out.println(result);
-         }
-     }
+   public class App {
+        public static void calculate(Expression expression) {
+           double result = 0;
+           try {
+               result = Calculator.getInstance().calculate((SequenceExpression) expression);
+           } catch (CalculatorException e) {
+               // process exception
+           }
+   
+           System.out.println(result);
+        }
+   }
     ```
    You needn't instantiate Calculator every use, you can make it once.
 4. Number class, but I don't recommend you to use it.
@@ -85,21 +84,21 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException, CalculatorException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Please enter an expression: ");
+       Scanner scanner = new Scanner(System.in);
+       System.out.print("Please enter an expression: ");
 
-        String expression = scanner.nextLine();
+       String expression = scanner.nextLine();
 
-        Parser parser = new Parser(expression);
-        parser.parse();
+       Parser parser = new Parser(expression);
+       parser.parse();
 
-        ExpressionsTree expressionsTree = new ExpressionsTree(parser.getResult());
-        expressionsTree.build();
+       ExpressionsTree expressionsTree = new ExpressionsTree(parser.getResult());
+       expressionsTree.build();
 
-        Calculator calculator = new Calculator();
-        double result = calculator.calculate((SequenceExpression) expressionsTree.getRoot());
+       double result = Calculator.getInstance()
+               .calculate((SequenceExpression) expressionsTree.getRoot());
 
-        System.out.printf("%s = %f%n", expression, result);
+       System.out.printf("%s = %f%n", expression, result);
     }
 }
 ```
