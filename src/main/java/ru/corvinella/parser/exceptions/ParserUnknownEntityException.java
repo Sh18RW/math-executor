@@ -1,6 +1,8 @@
 package ru.corvinella.parser.exceptions;
 
 public class ParserUnknownEntityException extends ParserException {
+    private final String symbol;
+
     /**
      * Exception signalise that in expression unknown symbol and parser can't work with it.
      * @param symbol a symbol which caused an exception.
@@ -9,5 +11,11 @@ public class ParserUnknownEntityException extends ParserException {
      */
     public ParserUnknownEntityException(String symbol, String expression, int tracer) {
         super(String.format("Unknown \"%s\" character", symbol), expression, tracer);
+
+        this.symbol = symbol;
+    }
+
+    public String getSymbol() {
+        return symbol;
     }
 }
