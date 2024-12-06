@@ -9,7 +9,7 @@ import java.util.List;
  * @author sh18rw
  */
 public class FunctionExpression extends ValueExpression {
-    public static final List<String> supportedFunctions = Arrays.asList("log", "sin", "tg", "ctg");
+    public static final List<String> supportedFunctions = Arrays.asList("log", "sin", "cos", "tg", "ctg");
 
     private final WordToken token;
     private ArgumentsExpression arguments;
