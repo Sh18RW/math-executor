@@ -87,7 +87,7 @@ public class FunctionCalculator implements ICalculator<FunctionExpression> {
         // checks for tg(x), where x != Pi/2 + Pi*k, where k is ℤ
         // tg(x) = sin(x) / cos(x) => cos(x) != 0
         if (radians % (Math.PI) == Math.PI / 2) {
-            throw new CalculatorIllegalArgumentException("The argument of tangent must not be equal to Pi/2 + Pi+k, where ℤ.", argumentsExpression.getToken());
+            throw new CalculatorIllegalArgumentException("The argument of tangent must not be equal to Pi/2 + Pi*k, where ℤ.", argumentsExpression.getToken());
         }
 
         return Math.tan(radians);
@@ -100,10 +100,10 @@ public class FunctionCalculator implements ICalculator<FunctionExpression> {
 
         Double radians = Calculator.getInstance().calculate((SequenceExpression) argumentsExpression.getArgument(0));
 
-        // checks for tg(x), where x != Pi/2 + Pi*k, where k is ℤ
-        // tg(x) = sin(x) / cos(x) => cos(x) != 0
-        if (radians % (Math.PI) == Math.PI / 2) {
-            throw new CalculatorIllegalArgumentException("The argument of cotangent must not be equal to Pi/2 + Pi+k, where ℤ.", argumentsExpression.getToken());
+        // checks for tg(x), where x != Pi*k, where k is ℤ
+        // сtg(x) = cos(x) / sin(x) => sin(x) != 0
+        if (radians % (Math.PI) == 0) {
+            throw new CalculatorIllegalArgumentException("The argument of cotangent must not be equal to Pi*k, where ℤ.", argumentsExpression.getToken());
         }
 
         return 1.0 / Math.tan(radians);
