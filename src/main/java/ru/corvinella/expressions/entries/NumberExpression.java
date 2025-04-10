@@ -6,16 +6,11 @@ import ru.corvinella.tokens.NumberToken;
  * @author sh18rw
  */
 public class NumberExpression extends ValueExpression {
-    private final boolean isNegative;
     private final NumberToken token;
 
     public NumberExpression(boolean isNegative, NumberToken token) {
-        this.isNegative = isNegative;
+        super(isNegative);
         this.token = token;
-    }
-
-    public boolean isNegative() {
-        return isNegative;
     }
 
     public NumberToken getToken() {
@@ -26,7 +21,7 @@ public class NumberExpression extends ValueExpression {
     public String toString() {
 
         return "Number[" +
-                (isNegative ? "negative" : "positive") +
+                (isNegative() ? "negative" : "positive") +
                 " " +
                 token.getValue() +
                 "]";

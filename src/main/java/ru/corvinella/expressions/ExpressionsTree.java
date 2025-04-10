@@ -21,7 +21,7 @@ public class ExpressionsTree {
     public ExpressionsTree(List<Token<?>> tokens) {
         expressionStates = new LinkedList<>();
         expressionStates.add(new ExpressionState(
-                new SequenceExpression(), ExpressionState.ReadingType.Sum));
+                new SequenceExpression(false), ExpressionState.ReadingType.Sum));
         this.tokens = tokens;
     }
 
@@ -73,7 +73,7 @@ public class ExpressionsTree {
 
                         Expression previousExpression = ((SequenceExpression) expressionState.pointer).popExpression();
 
-                        SequenceExpression newSequenceExpression = new SequenceExpression();
+                        SequenceExpression newSequenceExpression = new SequenceExpression(isValueNegative(expressionState));
                         newSequenceExpression.append(previousExpression);
 
                         ExpressionState newState = new ExpressionState(newSequenceExpression,
@@ -106,24 +106,20 @@ public class ExpressionsTree {
 
                 boolean isNumber = token instanceof NumberToken;
 
-                boolean isNegative = expressionState.negativeValueNext;
-                if (isNegative) {
-                    expressionState.negativeValueNext = false;
-                }
-
                 expressionState.waitedType = ExpressionState.ReadingTokenType.Operation;
 
                 if (isNumber) {
-                    expressionToAdd = new NumberExpression(isNegative, (NumberToken) token);
+                    expressionToAdd = new NumberExpression(isValueNegative(expressionState), (NumberToken) token);
                 } else {
                     WordToken wordToken = (WordToken) token;
 
                     if (FunctionExpression.supportedFunctions.contains(wordToken.getValue())) {
-                        FunctionExpression functionExpression = new FunctionExpression(wordToken);
+                        FunctionExpression functionExpression = new FunctionExpression(isValueNegative(expressionState), wordToken);
                         ArgumentsExpression argumentsExpression = new ArgumentsExpression(wordToken);
                         ExpressionState argumentsState = new ExpressionState(argumentsExpression, ExpressionState.ReadingType.Argument);
                         expressionStates.add(argumentsState);
-                        SequenceExpression sequenceExpression = new SequenceExpression();
+
+                        SequenceExpression sequenceExpression = new SequenceExpression(isValueNegative(expressionState));
                         ExpressionState newState = new ExpressionState(sequenceExpression, ExpressionState.ReadingType.Sum);
                         newState.ignoreOpenParenthesis = true;
                         expressionStates.add(newState);
@@ -132,7 +128,7 @@ public class ExpressionsTree {
                         functionExpression.addArguments(argumentsExpression);
                         expressionToAdd = functionExpression;
                     } else if (ConstantExpression.supportedConstants.contains(wordToken.getValue())) {
-                        expressionToAdd = new ConstantExpression(wordToken);
+                        expressionToAdd = new ConstantExpression(isValueNegative(expressionState), wordToken);
                     } else {
                         throw new UnknownWordExpressionException(wordToken);
                     }
@@ -146,13 +142,12 @@ public class ExpressionsTree {
 
                 break;
             case ArgumentsSeparator:
-
                 while (expressionState.readingType != ExpressionState.ReadingType.Argument) {
                     endCurrentState();
                     expressionState = getExpressionState();
                 }
 
-                expressionToAdd = new SequenceExpression();
+                expressionToAdd = new SequenceExpression(isValueNegative(expressionState));
                 expressionStates.add(new ExpressionState(expressionToAdd, ExpressionState.ReadingType.Sum));
 
                 break;
@@ -179,7 +174,7 @@ public class ExpressionsTree {
                 ParenthesisToken parenthesisToken = (ParenthesisToken) token;
 
                 if (parenthesisToken.getValue() == ParenthesisType.Open) {
-                    expressionToAdd = new SequenceExpression();
+                    expressionToAdd = new SequenceExpression(isValueNegative(expressionState));
 
                     expressionState.waitedType = ExpressionState.ReadingTokenType.Operation;
 
@@ -223,6 +218,12 @@ public class ExpressionsTree {
         }
 
         expressionStates.remove(expressionStates.size() - 1);
+    }
+
+    private boolean isValueNegative(ExpressionState state) {
+        boolean isNegative = state.negativeValueNext;
+        state.negativeValueNext = false;
+        return isNegative;
     }
 
     public final Expression getRoot() {

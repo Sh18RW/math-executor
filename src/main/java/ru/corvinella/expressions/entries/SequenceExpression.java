@@ -9,7 +9,8 @@ import java.util.List;
 public class SequenceExpression extends ValueExpression {
     private final List<Expression> expressionsList;
 
-    public SequenceExpression() {
+    public SequenceExpression(boolean isNegative) {
+        super(isNegative);
         this.expressionsList = new LinkedList<>();
     }
 

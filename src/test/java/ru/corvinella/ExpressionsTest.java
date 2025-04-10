@@ -292,7 +292,7 @@ public class ExpressionsTest {
     }
 
     public ConstantExpression makeConstant(String constantName) {
-        return new ConstantExpression(new WordToken(constantName, 0));
+        return new ConstantExpression(false, new WordToken(constantName, 0));
     }
 
     private void assertExpression(Expression expected, String expression) throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException {
@@ -310,7 +310,7 @@ public class ExpressionsTest {
     }
 
     private SequenceExpression makeSequence(Expression... expressions) {
-        SequenceExpression sequenceExpression = new SequenceExpression();
+        SequenceExpression sequenceExpression = new SequenceExpression(false);
 
         for (Expression expression : expressions) {
             sequenceExpression.append(expression);
@@ -334,7 +334,7 @@ public class ExpressionsTest {
     }
 
     private FunctionExpression makeFunction(String functionName, Expression... arguments) {
-        FunctionExpression functionExpression = new FunctionExpression(new WordToken(functionName, 0));
+        FunctionExpression functionExpression = new FunctionExpression(false, new WordToken(functionName, 0));
         ArgumentsExpression argumentsExpression = new ArgumentsExpression(new ParenthesisToken(ParenthesisType.Open, 0));
 
         for (Expression argument : arguments) {

@@ -1,6 +1,5 @@
 package ru.corvinella.expressions.exceptions;
 
-import ru.corvinella.tokens.Token;
 import ru.corvinella.tokens.WordToken;
 
 /**
