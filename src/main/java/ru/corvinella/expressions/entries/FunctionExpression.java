@@ -14,7 +14,8 @@ public class FunctionExpression extends ValueExpression {
     private final WordToken token;
     private ArgumentsExpression arguments;
 
-    public FunctionExpression(WordToken token) {
+    public FunctionExpression(boolean isNegative, WordToken token) {
+        super(isNegative);
         this.token = token;
 
         if (!supportedFunctions.contains(token.getValue())) {

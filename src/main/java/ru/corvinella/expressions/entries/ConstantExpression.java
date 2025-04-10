@@ -12,7 +12,8 @@ public class ConstantExpression extends ValueExpression {
     public static final List<String> supportedConstants = Arrays.asList("pi", "e");
     private final WordToken token;
 
-    public ConstantExpression(WordToken wordToken) {
+    public ConstantExpression(boolean isNegative, WordToken wordToken) {
+        super(isNegative);
         this.token = wordToken;
 
         if (!supportedConstants.contains(token.getValue())) {

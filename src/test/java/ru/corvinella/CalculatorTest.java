@@ -31,7 +31,7 @@ public class CalculatorTest {
         makeTest("2 * (3 * (5 - log(2, 16)) / 6)", 1.0);
         makeTest("Pi*2", Math.PI*2);
         makeTest("14 / (7 / (3 + (1 + (3/log(2, 4))) * 2 / 2 * 2) * (5 ^ 0 + 1))", 8.0);
-        makeTest("1 + 2log(2,4) / 3 - 4", 1.0 + 2.0 * 2.0 / 3.0 - 4.0);
+        makeTest("1 + 2log(2;4) / 3 - 4", 1.0 + 2.0 * 2.0 / 3.0 - 4.0);
         makeTest("3*e", 3 * Math.E);
     }
 
@@ -39,6 +39,9 @@ public class CalculatorTest {
     public void testCalculatorAdditional() throws ParserIllegalTokenValueException, ParserUnknownEntityException, ExpressionException, CalculatorException {
         makeTest("tg0", 0.0);
         makeTest("tg(Pi/4)", 1.0);
+        makeTest("-tg(Pi/4)", -1.0);
+        makeTest("tg(log(100, tg(Pi/log(2, 4^(1+1)))))", 0.0);
+        makeTest("5^-2", 0.04);
         makeTest("tg(Pi/3)", 1.0, false);
         makeTest("tg3.14", 0.0, false);
     }

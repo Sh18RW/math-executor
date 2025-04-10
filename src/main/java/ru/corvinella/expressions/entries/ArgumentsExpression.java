@@ -1,6 +1,5 @@
 package ru.corvinella.expressions.entries;
 
-import ru.corvinella.tokens.ParenthesisToken;
 import ru.corvinella.tokens.Token;
 
 import java.util.LinkedList;

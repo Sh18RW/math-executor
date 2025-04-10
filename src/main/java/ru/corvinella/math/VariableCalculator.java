@@ -17,28 +17,31 @@ public class VariableCalculator implements ICalculator<ValueExpression> {
 
     @Override
     public Double calculate(ValueExpression expression) throws CalculatorException {
+        Double value = null;
         if (expression instanceof NumberExpression) {
             NumberExpression numberExpression = (NumberExpression) expression;
 
-            Double value = numberExpression.getToken().getValue();
+            value = numberExpression.getToken().getValue();
+        } else if (expression instanceof FunctionExpression) {
+            FunctionExpression functionExpression = (FunctionExpression) expression;
 
-            if (numberExpression.isNegative()) {
+            value = functionCalculator.calculate(functionExpression);
+        } else if (expression instanceof ConstantExpression) {
+            ConstantExpression constantExpression = (ConstantExpression) expression;
+
+            value = constantCalculator.calculate(constantExpression);
+        } else if (expression instanceof SequenceExpression) {
+            SequenceExpression sequenceExpression = (SequenceExpression) expression;
+
+            value = Calculator.getInstance().calculate(sequenceExpression);
+        }
+
+        if (value != null) {
+            if (expression.isNegative()) {
                 value *= -1;
             }
 
             return value;
-        } else if (expression instanceof FunctionExpression) {
-            FunctionExpression functionExpression = (FunctionExpression) expression;
-
-            return functionCalculator.calculate(functionExpression);
-        } else if (expression instanceof ConstantExpression) {
-            ConstantExpression constantExpression = (ConstantExpression) expression;
-
-            return constantCalculator.calculate(constantExpression);
-        } else if (expression instanceof SequenceExpression) {
-            SequenceExpression sequenceExpression = (SequenceExpression) expression;
-
-            return Calculator.getInstance().calculate(sequenceExpression);
         }
 
         // It should not ever happen.
